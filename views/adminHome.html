@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Portal</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- stylesheets  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans|Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalise.css">
+    <!-- custom stylesheet -->
+    <link rel="stylesheet" href="/css/main.css">   
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar sidenav" id="mySidenav">
+            <div class="logo hidden">
+                <img src="https://via.placeholder.com/80">
+                <a href="#">User Name</a>
+            </div>
+            <div class="hidden">
+                <ul class="nav-list">
+                    <li>
+                        <button class="dropdown-btn">account management 
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            <ul>
+                                <li><a href="#">add guest</a></li>
+                                <li><a href="#">remove guest</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="dropdown-btn">billing 
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            <ul>
+                                <li><a href="#">view bill</a></li>
+                                <!-- <li><a href="#">remove guest</a></li> -->
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="dropdown-btn">information 
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            <ul>
+                                <li><a href="#">get details</a></li>
+                                <!-- <li><a href="#">remove guest</a></li> -->
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- <li>
+                        <a href="#">Logout</a>
+                            <button class="dropdown-btn">alert 
+                            <i class="fa fa-caret-down"></i>
+                        </button> 
+                        <div class="dropdown-container">
+                            <ul>
+                                <li><a href="#">no meal today</a></li>
+                            </ul>
+                        </div> 
+                    </li> -->
+                    <!-- <li>
+                        <button class="dropdown-btn">alert 
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-container">
+                            <ul>
+                                <li><a href="#">no meal today</a></li>
+                            </ul>
+                        </div>
+                    </li>                -->
+                </ul>
+            </div>
+        </nav>
+
+        <div class="content" id="content">
+            <a href="javascript:void(0)" id="closebtn" class="closebtn" onclick="openNav()">&#9776;</a>
+            <div class="main">
+
+            </div>
+            <div class="list-below">
+                <ul>
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                </ul>
+                <!-- <p>Developed by Srishti Jaiswal</p> -->
+            </div>
+       </div>
+    </div>
+    <script src="/script/main.js"></script>
+</body>
+</html>
