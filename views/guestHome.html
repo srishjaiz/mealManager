@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- stylesheets  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans|Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalise.css">
+    <!-- custom stylesheet -->
+    <link rel="stylesheet" href="src/css/vanilla-calendar-min.css">
+    <script src="src/js/vanilla-calendar-min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">   
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar sidenav" id="mySidenav">
+            <div class="logo hidden">
+                <img src="https://via.placeholder.com/80">
+                <a href="#">User Name</a>
+            </div>
+            <div class="hidden">
+                <ul class="nav-list">
+                    <li>
+                        <a href="guestHome">home</a>
+                    </li>
+                    <li>
+                        <a href="guestBill">view bill</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="content" id="content">
+            <a href="javascript:void(0)" id="closebtn" class="closebtn" onclick="openNav()">&#9776;</a>
+            <main class="main">
+                <h1>meal management</h1>            
+                <div class="main-content-wrapper">
+                        <div class="meal-calendar top">
+                            <h2>view meals</h2>
+                            <div class="calendar-wrapper">
+                                <div id="mealCalendar" class="vanilla-calendar"></div>
+                            </div>
+                            <!-- <form class="" action="#" method="POST">
+                                <div class="btn-wrapper">                           
+                                    <button class="onhover-bg-color btn ">view</button>
+                                </div>
+                            </form> -->
+                            <!-- <form class="" action="#" method="POST">   
+                                <div class="date">
+                                    <label>from:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="date">
+                                    <label>to:</label>
+                                    <input type="date">
+                                </div>                         
+                                <button class="onhover-bg-color btn btn-create">view</button>
+                            </form> -->
+                        </div>
+                    <div class="visible bottom">
+                        <h2>meal selected</h2>
+                        <form class="" action="#" method="POST">
+                            <div class="select">
+                                <label>breakfast:</label><select>
+                                    <option value="volvo">Veg</option>
+                                    <option value="saab">Non Veg</option>
+                                    <option value="mercedes">None</option>
+                                </select>
+                            </div>   
+                            <div class="select">
+                                <label>lunch:</label><select>
+                                    <option value="volvo">Veg</option>
+                                    <option value="saab">Non Veg</option>
+                                    <option value="mercedes">None</option>
+                                </select>
+                            </div> 
+                            <div class="select">
+                                <label>dinner:</label><select>
+                                    <option value="volvo">Veg</option>
+                                    <option value="saab">Non Veg</option>
+                                    <option value="mercedes">None</option>
+                                </select>
+                            </div>                          
+                            <button class="onhover-bg-color btn btn-create">update</button>
+                        </form>
+                        <!-- <div>
+                            <span>breakfast</span>
+                            <span>veg</span>
+                        </div>
+                        <div>
+                            <span>lunch</span>
+                            <span>non veg</span>
+                        </div>
+                        <div>
+                            <span>dinner</span>
+                            <span>non veg</span>
+                        </div> -->
+                        <!-- <form class="" action="#" method="POST">                        
+                            <button class="onhover-bg-color btn btn-create">ok</button>
+                        </form> -->
+                    </div>
+                </div>
+            </main>
+            <div class="list-below">
+                <ul>
+                    <li>
+                        <a href="index">Logout</a>
+                    </li>
+                </ul>
+                <!-- <p>Developed by Srishti Jaiswal</p> -->
+            </div>
+       </div>
+    </div>
+    <script src="/script/main.js"></script>
+    <script>
+        let obj={};
+        let calendar = new VanillaCalendar({
+            selector: "#mealCalendar",
+            pastDates: true,
+            onSelect: (data, elem) => {
+                console.log(data,elem)
+            }
+        })
+    </script>
+</body>
+</html>

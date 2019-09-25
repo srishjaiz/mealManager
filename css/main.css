@@ -4,6 +4,7 @@
     outline: none;
 }
 body{
+    background: #5f7586;
     font-family: 'Poppins', 'Nunito Sans', sans-serif;
 }
 /* html, body {
@@ -45,26 +46,38 @@ ul{
     height: 60%;
     background-color: #000;
     /* opacity: 0.7; */
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.faded-div>a{
+.faded-div a {
     background-color: #fff;
     color: #000;
-    padding: 2.5% 10%;
+    padding: 2rem 4rem;
     font-size: 26px;
-    font-weight: 800;   
+    font-weight: 800;
     cursor: pointer;
     border: none;
-    box-shadow: 2px 2px 3px 2px #9a9a9a;
+    box-shadow: 2px 2px 3px 2px #000;
+    transition: 0.2s;
 }
-.faded-div>a:hover{
-    border-bottom: 1px solid #9a9a9a;
+.faded-div a:hover {
+    box-shadow: 7px 7px 5px #000;
 }
-.faded-div>a>img{
+
+.faded-div a>img{
     vertical-align: middle;
+    transition: 0.2s;
+}
+.login-btn-wrapper {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    transition: 0.5s;
+}
+.login-btn-wrapper:hover{
+    margin-top: -5px;
 }
 @media only screen and (max-width: 600px) {
     .banner > h1{
@@ -74,7 +87,7 @@ ul{
     .faded-div{
         width: 90%;
     }
-    .faded-div > a{
+    .faded-div  a{
         font-size: 16px;
         padding: 5% 10%;
     }
@@ -100,27 +113,29 @@ ul{
 
 .sidenav {
     height: 100%;
-    width: 0;
+    width: 280px;
     position: fixed;
     z-index: 1;
     top: 0;
-    left: 0;
+    /* left: 0; */
     /* background-color: #111; */
     transition: 0.5s;
     overflow: hidden;
 }  
   
 .closebtn {
-    position: absolute;
-    /*top: 0;
-    left: 0; */
-    font-size: 36px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 20px;
     /* margin-left: 50px; */
-    /* font-size:30px; */
-    cursor:pointer;
+    font-size: 20px;
+    cursor: pointer;
     transition: 0.5s;
-    color: #354052;
+    color: #fff;
     z-index: 10;
+    background: #374254;
+    padding: 5px 10px;
 }
 .closebtn:hover{
       color: #ccc;
@@ -131,9 +146,9 @@ ul{
     .sidenav a {font-size: 18px;}
 }
 
-nav > *{
+/* nav > *{
     display: none;
-}
+} */
 nav > div{
     border-bottom: 3px solid #212e44;
     border-top: 1px solid #404856;
@@ -240,20 +255,20 @@ nav h4 {
     position: absolute;
     right: 10px;
     top: 10px;
-    background-color: #d5d5d5;
+    background-color: #f8f8f8;
     font-size: 14px;
     padding: 10px 20px;
     cursor: pointer;
     transition: 0.5s;
 }
 .list-below a {
-    color: #000;
+    color: #374254;
     font-weight: 800;
 }
 /* .list-below a:hover{
 } */
-.list-below:hover{
-    background-color: #535353; 
+.list-below:hover {
+    background-color: #5f7586;
 }
 .list-below:hover a{
     color: #fff;
@@ -348,12 +363,12 @@ button:hover{
 @media only screen and (max-width: 600px) {
     .main-content-wrapper > div {
         min-width: 100%;
-        padding-bottom: 20px;
+        padding-bottom: 30px;
         /* min-height: 300px; */
     }
     .main-content-wrapper {
         width: 100%;
-        padding: 30px;
+        padding: 20px;
     }
     .main-content-wrapper h2{
         padding: 20px;
@@ -376,7 +391,7 @@ button:hover{
 .date > label {
     font-size: 12px;
     text-transform: uppercase;
-    margin: 10px 0;
+    margin-top: 10px;
     display: block;
     color: #696969;
 }
@@ -420,5 +435,17 @@ button:hover{
 @media only screen and (max-width: 600px) {
     .visible > div{
         margin: 10px 20px;
+    }
+}
+/* guest home */
+.calendar-wrapper {
+    padding: 0 35px;
+}
+.btn-wrapper {
+    text-align: center;
+}
+@media only screen and (max-width: 480px) {
+    .calendar-wrapper{
+        padding: 0 20px;
     }
 }

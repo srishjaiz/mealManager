@@ -9,6 +9,7 @@ const app=express();
 app.use('/css', express.static(__dirname+'/css'));
 app.use('/script', express.static(__dirname+'/script'));
 app.use(express.static(__dirname+'/public'));
+app.use(express.static(__dirname+'/vanilla-calendar-master'));
 
 app.use('/auth', authRoutes);
 

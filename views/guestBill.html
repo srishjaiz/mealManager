@@ -26,10 +26,10 @@
             <div class="hidden">
                 <ul class="nav-list">
                     <li>
-                        <a href="#">home</a>
+                        <a href="guestHome">home</a>
                     </li>
                     <li>
-                        <a href="#">view bill</a>
+                        <a href="guestBill">view bill</a>
                     </li>
                 </ul>
             </div>
@@ -40,16 +40,22 @@
             <main class="main">
                 <h1>bill generation</h1>            
                 <div class="main-content-wrapper">
+                        <div class="bill-form top">
+                            <h2>view bill</h2>
+                            <form class="" action="#" method="POST">   
+                                <div class="date">
+                                    <label>from:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="date">
+                                    <label>to:</label>
+                                    <input type="date">
+                                </div>                         
+                                <button class="onhover-bg-color btn btn-create">view</button>
+                            </form>
+                        </div>
                     <div class="visible bottom">
                         <h2>bill:-</h2>
-                        <div>
-                            <span>from</span>
-                            <span>02-09-2019</span>
-                        </div>
-                        <div>
-                            <span>to</span>
-                            <span>02-09-2019</span>
-                        </div>
                         <div>
                             <span>veg</span>
                             <span>5</span>
