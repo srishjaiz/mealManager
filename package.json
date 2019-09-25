@@ -1,0 +1,34 @@
+{
+  "name": "mealmanager",
+  "version": "1.0.0",
+  "description": "\"This is a web application which helps Meal Suppliers to manage their supplies to their customers where customers themselves can request for supply.\"",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "passport-google-oauth20": "^2.0.0",
+    "passport": "^0.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srishjaiz/mealManager.git"
+  },
+  "keywords": [
+    "meal",
+    "manager",
+    "food",
+    "management",
+    "srishti",
+    "srishjaiz",
+    "mealManager"
+  ],
+  "author": "Srishti Jaiswal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srishjaiz/mealManager/issues"
+  },
+  "homepage": "https://github.com/srishjaiz/mealManager#readme"
+}
