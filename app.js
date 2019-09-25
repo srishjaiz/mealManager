@@ -3,14 +3,14 @@ const path= require('path');
 const fs= require('fs');
 const authRoutes = require('./routes/auth-routes');
 const passportSetup = require('./config/passport-setup');
-
+const compression= require('compression');
 const app=express();
 
 app.use('/css', express.static(__dirname+'/css'));
 app.use('/script', express.static(__dirname+'/script'));
 app.use(express.static(__dirname+'/public'));
 app.use(express.static(__dirname+'/vanilla-calendar-master'));
-
+app.use(compression());
 app.use('/auth', authRoutes);
 
 app.get('/', (req,res)=>{

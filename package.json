@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "description": "\"This is a web application which helps Meal Suppliers to manage their supplies to their customers where customers themselves can request for supply.\"",
   "main": "app.js",
+  "engines": {
+    "node": "10.16.3"
+  },
   "dependencies": {
+    "compression": "^1.7.4",
     "express": "^4.17.1",
-    "passport-google-oauth20": "^2.0.0",
-    "passport": "^0.4.0"
+    "mongoose": "^5.7.1",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {},
   "scripts": {
