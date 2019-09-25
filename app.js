@@ -4,6 +4,9 @@ const fs= require('fs');
 const authRoutes = require('./routes/auth-routes');
 const passportSetup = require('./config/passport-setup');
 const compression= require('compression');
+// const mongoConnect = require('./util/database').mongoConnect;
+const mongoose = require('mongoose');
+
 const app=express();
 
 app.use('/css', express.static(__dirname+'/css'));
@@ -30,6 +33,16 @@ app.get(/^(.+)$/, (req,res)=>{
     }
 });
 
-app.listen(1337,()=>{
-    console.log('listening');
+
+
+mongoose.connect(
+    'mongodb+srv://mealSupplier:CfqNwxiQbsFHr7gM@mealmanager-r4zy2.mongodb.net/test?retryWrites=true&w=majority'
+    ,{ useNewUrlParser: true,useUnifiedTopology: true })
+.then(result => {
+    app.listen(process.env.PORT || 1337,() => {
+        console.log('listening');
+    })
+})
+.catch(err => {
+    console.log(err);
 });
