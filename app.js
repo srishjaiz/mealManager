@@ -1,20 +1,34 @@
 const express= require("express");
 const path= require('path');
 const fs= require('fs');
-const authRoutes = require('./routes/auth-routes');
 const passportSetup = require('./config/passport-setup');
 const compression= require('compression');
 // const mongoConnect = require('./util/database').mongoConnect;
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+var passport = require('passport');
 
 const app=express();
+
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/css', express.static(__dirname+'/css'));
 app.use('/script', express.static(__dirname+'/script'));
 app.use(express.static(__dirname+'/public'));
 app.use(express.static(__dirname+'/vanilla-calendar-master'));
+var {passport,router} = require('./routes/auth-routes');
+app.use('/auth', router);
 app.use(compression());
-app.use('/auth', authRoutes);
+
+// set up session cookies
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: ['thisiskeyforcookieencryption']
+}));
+
 
 app.get('/', (req,res)=>{
     // res.render('index.html');

@@ -21,14 +21,26 @@ router.get('/logout', (req, res) => {
 
 // auth with google+
 router.get('/google', passport.authenticate('google', {
-    scope: ['profile']
+    // scope: ['profile']
+    scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+    ], prompt: "select_account"
 }));
 
 
 // callback route for google to redirect to
 // hand control to passport to use code to grab profile info
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.send('you reached the redirect URI');
+    res.send('you reached the redirect URI'+ req.user);
+    // try{
+    //     res.sendFile('adminHome.html',{root: path.join(__dirname, '../', '/views')});
+    // }
+    // catch(err){
+    //     console.log(err);
+    //     res.sendFile('404.html',{root: path.join(__dirname, '../', '/views')});
+    // }
+    console.log(req.user.useremail);
 });
 
-module.exports = router;
+module.exports = {passport,router};
