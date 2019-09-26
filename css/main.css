@@ -87,11 +87,13 @@ ul{
     .faded-div{
         width: 90%;
     }
+} 
+@media only screen and (max-width: 480px) {
     .faded-div  a{
         font-size: 16px;
-        padding: 5% 10%;
+        padding: 1rem 2rem;
     }
-} 
+}
 
 /* layout */
 .container {
@@ -305,7 +307,7 @@ main > h1 {
 }
 .main-content-wrapper > div {
     background: #f8f8f8;
-    min-width: 500px;
+    min-width: 550px;
     /* min-height: 300px; */
     padding-bottom: 50px;
 }
@@ -439,7 +441,7 @@ button:hover{
 }
 /* guest home */
 .calendar-wrapper {
-    padding: 0 35px;
+    padding: 0 30px;
 }
 .btn-wrapper {
     text-align: center;
