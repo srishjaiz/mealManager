@@ -361,7 +361,21 @@ button:hover{
     display: block;
     color: #696969;
 }
-
+.datalist > label {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 10px 0;
+    display: block;
+    color: #696969;
+}
+.datalist > input {
+    border: 1px solid #ccc;
+    font-size: 12px;
+    background: #dadada;
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 5px;
+}
 @media only screen and (max-width: 600px) {
     .main-content-wrapper > div {
         min-width: 100%;

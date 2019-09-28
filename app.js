@@ -7,9 +7,15 @@ const compression= require('compression');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 var passport = require('passport');
+var profileRoutes = require('./routes/profile-routes');
 
 const app=express();
 
+// set up session cookies
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: ['thisiskeyforcookieencryption']
+}));
 
 // initialize passport
 app.use(passport.initialize());
@@ -19,15 +25,15 @@ app.use('/css', express.static(__dirname+'/css'));
 app.use('/script', express.static(__dirname+'/script'));
 app.use(express.static(__dirname+'/public'));
 app.use(express.static(__dirname+'/vanilla-calendar-master'));
+
 var {passport,router} = require('./routes/auth-routes');
+
 app.use('/auth', router);
+app.use('/profile', profileRoutes);
+
 app.use(compression());
 
-// set up session cookies
-app.use(cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: ['thisiskeyforcookieencryption']
-}));
+
 
 
 app.get('/', (req,res)=>{

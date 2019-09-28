@@ -22,8 +22,8 @@ passport.use(
     }, (accessToken, refreshToken, profile, done) => {
         // passport callback function
         console.log('passport callback function fired:');
-        console.log(profile);
-        console.log(profile.emails[0].value);
+        // console.log(profile);
+        // console.log(profile.emails[0].value);
         User.findOne({googleId: profile.id}).then((currentUser) => {
             if(currentUser){
                 // already have this user

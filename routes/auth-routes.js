@@ -5,7 +5,7 @@ const passport = require('passport');
 // auth login
 router.get('/login', (req, res) => {
     try{
-        res.sendFile('login.html',{root: path.join(__dirname, '../', '/views')});
+        res.sendFile('/',{root: path.join(__dirname, '../', '/views')});
     }
     catch(err){
         console.log(err);
@@ -33,14 +33,16 @@ router.get('/google', passport.authenticate('google', {
 // hand control to passport to use code to grab profile info
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     // res.send('you reached the redirect URI'+ req.user);
-    try{
-        res.sendFile('guestHome.html',{root: path.join(__dirname, '../', '/views')});
-    }
-    catch(err){
-        console.log(err);
-        res.sendFile('404.html',{root: path.join(__dirname, '../', '/views')});
-    }
-    console.log(req.user.useremail);
+    // try{
+    //     res.sendFile('guestHome.html',{root: path.join(__dirname, '../', '/views')});
+    // }
+    // catch(err){
+    //     console.log(err);
+    //     res.sendFile('404.html',{root: path.join(__dirname, '../', '/views')});
+    // }
+
+    res.redirect('/profile');
+    console.log("in redirect",req.user.useremail);
 });
 
 module.exports = {passport,router};
