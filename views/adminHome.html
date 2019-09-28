@@ -21,7 +21,7 @@
         <nav class="navbar sidenav" id="mySidenav">
             <div class="logo hidden">
                 <img src="https://via.placeholder.com/80">
-                <a href="#">User Name</a>
+                <a href="#" id="user-name">User Name</a>
             </div>
             <div class="hidden">
                 <ul class="nav-list">
@@ -96,5 +96,28 @@
        </div>
     </div>
     <script src="/script/main.js"></script>
+    <script>
+        function sendRequest(method, url, cb, data) {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    cb(JSON.parse(xhr.responseText));
+                }
+            };
+            xhr.onerror = function(){
+                //handle network error here
+            }
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(data ? JSON.stringify(data) : undefined);
+        }
+        
+        (function(){
+            sendRequest('GET', '/profile/userinfo', (res) => {
+                console.log(res);
+                document.getElementById('user-name').innerHTML = res.name;
+            })
+        })();
+    </script>
 </body>
 </html>
