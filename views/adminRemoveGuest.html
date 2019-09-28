@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans|Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/normalise.css">
     <!-- custom stylesheet -->
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css">   
     <style>
 
     </style>
@@ -21,7 +21,6 @@
         <nav class="navbar sidenav" id="mySidenav">
             <div class="logo hidden">
                 <img src="https://via.placeholder.com/80">
-                <!-- <a href="#">User Name</a> -->
                 <a href="#" id="user-name">User Name</a>
             </div>
             <div class="hidden">
@@ -44,12 +43,18 @@
 
         <div class="content" id="content">
             <a href="javascript:void(0)" id="closebtn" class="closebtn" onclick="openNav()">&#9776;</a>
-            
             <main class="main">
-                <h1>billing</h1>            
+                <h1>user management</h1>            
                 <div class="main-content-wrapper">
-                    <div class="bill-form top">
-                        <h2>view bill</h2>
+                    <!-- <div class="add-guest top">
+                        <h2>add guest</h2>
+                        <form id="add-guest" action="#" method="POST">
+                            <input type="text" id="userName" value="" name="guestEmail" placeholder="Enter Email.."><br>
+                            <button type="submit" id="submit-btn" onclick=" sendEmail()" class="onhover-bg-color btn">add</button>
+                        </form>
+                    </div> -->
+                    <div class="remove-guest top">
+                        <h2>remove guest</h2>
                         <form class="" action="#" method="POST">
                             <div class="select">
                                 <label>email id:</label><select>
@@ -58,7 +63,7 @@
                                     <option value="mercedes">Mercedes</option>
                                     <option value="audi" selected>Audi</option>
                                 </select>
-                            </div>  
+                            </div> 
                             <div class="datalist">
                                 <label>shift:</label>
                                 <input list="shift">
@@ -67,39 +72,9 @@
                                     <option value="Lunch">
                                     <option value="Dinner">
                                 </datalist>  
-                            </div> 
-                            <div class="date">
-                                <label>from:</label>
-                                <input type="date">
-                            </div>
-                            <div class="date">
-                                <label>to:</label>
-                                <input type="date">
-                            </div>                         
-                            <button class="onhover-bg-color btn btn-create">view</button>
+                            </div>                           
+                            <button class="onhover-bg-color btn btn-create">remove</button>
                         </form>
-                    </div>
-                    <div class="visible bottom">
-                        <h2>bill</h2>
-                        <div>
-                            <span>name</span>
-                            <span>puja</span>
-                        </div>
-                        <div>
-                            <span>veg</span>
-                            <span>5</span>
-                        </div>
-                        <div>
-                            <span>non veg</span>
-                            <span>4</span>
-                        </div>
-                        <div>
-                            <span>total</span>
-                            <span>9</span>
-                        </div>
-                        <!-- <form class="" action="#" method="POST">                        
-                            <button class="onhover-bg-color btn btn-create">ok</button>
-                        </form> -->
                     </div>
                 </div>
             </main>
@@ -114,5 +89,26 @@
        </div>
     </div>
     <script src="/script/main.js"></script>
+    <script>
+        // (function(){
+        //     sendRequest('GET', '/profile/userprofile', (res) => {
+        //         // console.log("in ajax call", res);
+        //         document.getElementById('user-name').innerHTML = res.username;
+        //     })
+        // })();
+        // document.getElementById("submit-btn").addEventListener("click", function(event){
+        //     event.preventDefault()
+        // });
+        // function sendEmail(){
+        //     // e.preventDefault();
+        //     console.log("send fn");
+        //     let email=document.getElementById("userName").value;
+        //     console.log(email);
+        //     sendRequest('POST', '/profile/usermanage', (res) => {
+        //         // console.log("in ajax call", res);
+        //         // document.getElementById('user-name').innerHTML = res.username;
+        //     },{"greet":"hey","guestEmail":email});
+        // };
+    </script>
 </body>
 </html>

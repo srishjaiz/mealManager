@@ -14,4 +14,21 @@ router.get('/', authCheck, (req, res) => {
     res.send('you are logged in, this is your profile - ' + req.user.username);
 });
 
+router.get('/userprofile', authCheck, (req, res) => {
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    res.end(JSON.stringify(req.user));
+});
+
+
+router.post('/usermanage', authCheck, (req, res) => {
+    console.log("body: ",req.body.guestEmail);
+    console.log("user: ",req.user);
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    res.end(JSON.stringify(req.user));
+});
+
 module.exports = router;

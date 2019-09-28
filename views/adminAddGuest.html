@@ -21,7 +21,7 @@
         <nav class="navbar sidenav" id="mySidenav">
             <div class="logo hidden">
                 <img src="https://via.placeholder.com/80">
-                <a href="#">User Name</a>
+                <a href="#" id="user-name">User Name</a>
             </div>
             <div class="hidden">
                 <ul class="nav-list">
@@ -29,7 +29,10 @@
                         <a href="/adminHome">meal details</a>
                     </li>
                     <li>
-                        <a href="/adminDetails">user management</a>
+                        <a href="/adminAddGuest">add guest</a>
+                    </li>
+                    <li>
+                        <a href="/adminRemoveGuest">remove guest</a>
                     </li>
                     <li>
                         <a href="/adminBill">billing</a>
@@ -45,12 +48,12 @@
                 <div class="main-content-wrapper">
                     <div class="add-guest top">
                         <h2>add guest</h2>
-                        <form class="" action="#" method="POST">
-                            <input type="text" placeholder="Enter Email.."><br>
-                            <button class="onhover-bg-color btn">add</button>
+                        <form id="add-guest" action="#" method="POST">
+                            <input type="text" id="userName" value="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required name="guestEmail" placeholder="Enter Email.."><br>
+                            <button type="submit" id="submit-btn" onclick=" sendEmail()" class="onhover-bg-color btn">add</button>
                         </form>
                     </div>
-                    <div class="remove-guest bottom">
+                    <!-- <div class="remove-guest bottom">
                         <h2>remove guest</h2>
                         <form class="" action="#" method="POST">
                             <div class="select">
@@ -72,13 +75,13 @@
                             </div>                           
                             <button class="onhover-bg-color btn btn-create">remove</button>
                         </form>
-                    </div>
+                    </div> -->
                 </div>
             </main>
             <div class="list-below">
                 <ul>
                     <li>
-                        <a href="/index">Logout</a>
+                        <a href="/auth/logout">Logout</a>
                     </li>
                 </ul>
                 <!-- <p>Developed by Srishti Jaiswal</p> -->
@@ -86,5 +89,21 @@
        </div>
     </div>
     <script src="/script/main.js"></script>
+    <script>
+        
+        // document.getElementById("submit-btn").addEventListener("click", function(event){
+        //     event.preventDefault()
+        // });
+        // function sendEmail(){
+        //     // e.preventDefault();
+        //     console.log("send fn");
+        //     let email=document.getElementById("userName").value;
+        //     console.log(email);
+        //     sendRequest('POST', '/profile/usermanage', (res) => {
+        //         // console.log("in ajax call", res);
+        //         // document.getElementById('user-name').innerHTML = res.username;
+        //     },{"greet":"hey","guestEmail":email});
+        // };
+    </script>
 </body>
 </html>

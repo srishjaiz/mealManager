@@ -39,6 +39,8 @@ function openNav() {
     // function closeNav() {
     //     document.getElementById("mySidenav").style.width = "0";
     // }
+
+// function for dropdown
 var i;
 
 for (i = 0; i < dropdown.length; i++) {
@@ -53,3 +55,25 @@ for (i = 0; i < dropdown.length; i++) {
         }
     });
 }
+
+// Ajax function to send and receive data from server
+function sendRequest(method, url, cb, data) {
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            cb(JSON.parse(xhr.responseText));
+        }
+    };
+    xhr.onerror = function(){
+        //handle network error here
+    }
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(data ? JSON.stringify(data) : undefined);
+}    
+(function(){
+    sendRequest('GET', '/profile/userprofile', (res) => {
+        // console.log("in ajax call", res);
+        document.getElementById('user-name').innerHTML = res.username;
+    })
+})();
