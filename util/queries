@@ -1,0 +1,3 @@
+{$and: [{isAdmin: false},{useremail: {$exists: true}}]}
+
+{useremail: {$exists: true}}

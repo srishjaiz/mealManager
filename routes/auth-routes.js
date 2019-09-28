@@ -42,9 +42,13 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     //     console.log(err);
     //     res.sendFile('404.html',{root: path.join(__dirname, '../', '/views')});
     // }
-
-    res.redirect('/guestHome');
-    console.log("in redirect",req.user.useremail);
+    if(req.user.isAdmin){
+        res.redirect('/adminHome');
+    }
+    else{
+        res.redirect('/guestHome');
+    }
+    // console.log("in redirect",req.user);
 });
 
 module.exports = router;
