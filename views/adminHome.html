@@ -113,7 +113,7 @@
         var veg = document.getElementById('veg'); 
         var nonveg = document.getElementById('nonveg'); 
 
-
+        let data;
         function getMealsReq(){
             // console.log(shiftList.value, date.value);
             // let map={
@@ -129,7 +129,7 @@
                 alert("Enter valid shift!");
                 return;
             }
-            let data={
+            data={
                 date: date.value,
                 shiftInput: shiftInput
             }
@@ -147,7 +147,16 @@
             }, data); 
         }
         function updateMealCosts(){
-
+            sendRequest('POST', '/profile/updateMealCost', (res) => {
+                console.log("done: ",res);
+                if(res.mealReqFound){
+                    alert("Cost of each guest, requested for meal is updated!");
+                }
+                else{
+                    //no meal req found on that date
+                    alert("No meal request found for the selected date!");
+                }                
+            }, data);
         }
     
     </script>

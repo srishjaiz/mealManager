@@ -265,16 +265,6 @@ router.post('/setMealDetails', authCheck, (req, res) => {
             res.end(JSON.stringify(req.user));
         }
     });
-
-   
-    
-    // console.log("outside",sameDateFound);
-    // let resObj={
-    //     user: req.user,
-    //     sameDateFound: sameDateFound
-    // }
-    // res.end(JSON.stringify(resObj));
-    // res.end(JSON.stringify(req.user));
 });
 
 
@@ -334,5 +324,121 @@ router.post('/fetchMealsRequired', authCheck, (req, res) => {
     })
 });
 
-
+router.post('/updateMealCost', authCheck, (req, res) => {
+    console.log(req.body);
+    console.log(req.user);
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    let shiftIndex;
+    if(req.body.shiftInput=="Lunch")shiftIndex=1
+    else if(req.body.shiftInput=="Breakfast")shiftIndex=0
+    else if(req.body.shiftInput=="Dinner")shiftIndex=2
+    else shiftIndex=-1
+    
+    let mealReqFound=false;  
+    let veg=0,nonveg=0;
+    Meal.find({ mealsTaken: { $elemMatch: { date: req.body.date}}}).exec()
+    .then((usersReqMeal)=>{
+        console.log("users:",usersReqMeal);
+        if(usersReqMeal[0]){
+            mealReqFound=true;
+            usersReqMeal.forEach((userReqMeal)=>{
+                // console.log("user",userReqMeal);
+                userReqMeal.mealsTaken.forEach(fn);
+                function fn(obj, objIndex, mealsTakenArray){
+                    if(obj.date === req.body.date){
+                        // console.log(obj.shift);
+                        obj.shift.forEach((mealType, index)=>{
+                            // console.log("mealType:",mealType, "index:", index);
+                            if(mealType==1 && index==shiftIndex){
+                                // veg++;
+                                Meal.findOne({$and: [{useremail: userReqMeal.useremail}, {mealsTaken: { $elemMatch: { date: req.body.date}}}]})
+                                .then((user)=>{
+                                    if(user){
+                                        // console.log("user",user);
+                                        let oldCost;
+                                        user.mealsTaken.forEach((obj, index)=>{
+                                            if(obj.date==req.body.date){
+                                                oldCost= obj.cost;
+                                            }
+                                        })
+                                        
+                                        // console.log("oldcost:",oldCost);
+                                        let newCost= oldCost+40;
+                                        Meal.update(
+                                        {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                        { $set: { "mealsTaken.$.cost": newCost}}
+                                        )
+                                        .then((costUpdated)=>{
+                                            if(costUpdated.n){
+                                                console.log("updated")
+                                            }
+                                            else{
+                                                //not updated
+                                                console.log("not updated")
+                                            }
+                                        })
+                                    }
+                                    else{
+                                        console.log("user not found!")
+                                    }
+                                })
+                                
+                            }
+                            else if(mealType==2 && index==shiftIndex){
+                                // nonveg++;
+                                Meal.findOne({$and: [{useremail: userReqMeal.useremail}, {mealsTaken: { $elemMatch: { date: req.body.date}}}]})
+                                .then((user)=>{
+                                    if(user){
+                                        // console.log("user",user);
+                                        let oldCost;
+                                        user.mealsTaken.forEach((obj, index)=>{
+                                            if(obj.date==req.body.date){
+                                                oldCost= obj.cost;
+                                            }
+                                        })
+                                        // console.log("oldcost:",oldCost);
+                                        let newCost= oldCost+60;
+                                        Meal.update(
+                                        {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                        { $set: { "mealsTaken.$.cost": newCost}}
+                                        )
+                                        .then((costUpdated)=>{
+                                            if(costUpdated.n){
+                                                console.log("updated")
+                                            }
+                                            else{
+                                                //not updated
+                                                console.log("not updated")
+                                            }
+                                        })
+                                    }
+                                    else{
+                                        console.log("user not found!")
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }
+            })
+            let resObj={
+                mealReqFound: mealReqFound,
+                user: req.user
+            };
+            console.log(resObj);
+            res.end(JSON.stringify(resObj));
+        }
+        else{
+            console.log("no meal req found");
+            let resObj={
+                mealReqFound: mealReqFound,
+                user: req.user
+            };
+            console.log(resObj);
+            res.end(JSON.stringify(resObj));
+        }
+    })
+});
 module.exports = router;
