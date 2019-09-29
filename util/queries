@@ -1,3 +1,19 @@
 {$and: [{isAdmin: false},{useremail: {$exists: true}}]}
 
 {useremail: {$exists: true}}
+{isAdmin: false}
+
+function getJedisPromise(name){
+   var promise = Jedi.find({name:name}).exec();
+   return promise;
+}
+
+var promise = getJedisPromise('Luke');
+
+
+User.find({isAdmin: false}).exec()
+.then(function(guests){
+   guests.forEach(function(guest){
+      console.log(guest.useremail);
+   });
+})

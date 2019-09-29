@@ -23,7 +23,7 @@ router.get('/userprofile', authCheck, (req, res) => {
 });
 
 
-router.post('/usermanage', authCheck, (req, res) => {
+router.post('/addguest', authCheck, (req, res) => {
     console.log("body: ",req.body.guestEmail);
     console.log("user: ",req.user);
     // try {
@@ -65,5 +65,50 @@ router.post('/usermanage', authCheck, (req, res) => {
         }
     });
 });
+
+router.post('/fetchEmails', authCheck, (req, res) => {
+    let emails=[];
+    User.find({isAdmin: false}).exec()
+    .then(function(guests){
+        guests.forEach(function(guest){
+            // console.log(guest.useremail);
+            emails.push(guest.useremail);
+        });
+        data={
+            emails: emails
+        }
+        console.log(data);
+    });
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    res.end(JSON.stringify(data));
+});
+
+router.post('/removeguest', authCheck, (req, res) => {
+    console.log("body: ",req.body.guestEmail);
+    console.log("user: ",req.user);
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    let data={};
+    User.deleteOne({useremail: req.body.guestEmail}).then((removedUser)=>{
+        if(removedUser.n){
+            // console.log("user removed");
+            data={
+                exists: true
+            }
+        }
+        else{
+            data={
+                exists: false
+            }
+        }
+        res.end(JSON.stringify(data));            
+    });    
+    
+    
+});
+
 
 module.exports = router;

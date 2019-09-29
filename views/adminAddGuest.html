@@ -101,7 +101,7 @@
             if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
             {
                 // return (true)
-                sendRequest('POST', '/profile/usermanage', (res) => {
+                sendRequest('POST', '/profile/addguest', (res) => {
                     // console.log(res);
                     if(res.exists){
                         alert(res.user.useremail+" already exists, please enter new email!");
