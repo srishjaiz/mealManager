@@ -34,7 +34,6 @@ passport.use(
                     }
                     else{
                         //new user
-
                         User.remove({useremail: profile.emails[0].value}).then((removedUser)=>{
                             if(removedUser){
                                 new User({

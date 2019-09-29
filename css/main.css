@@ -465,8 +465,46 @@ button:hover{
 .vanilla-calendar {
     width: 100%;
 }
+.shift-radio {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin: 15px 0;
+}
+.shift-radio > label {
+    font-size: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #696969;
+    width: 50px;
+}
+.shift-radio > div {
+    display: inline-block;
+    max-width: 120px;
+    font-size: 12px;
+    vertical-align: middle;
+    color: #696969;
+    padding: 0 20px;
+    text-transform: capitalize;
+}
+.shift-radio input {
+    vertical-align: text-top;
+    margin-right: 5px;
+}
 @media only screen and (max-width: 480px) {
     .calendar-wrapper{
         padding: 0 20px;
+    }
+    .shift-radio > *{
+        margin: 5px 0;
+    }
+    .shift-radio > div{
+        padding: 0;
+    }
+    .shift-radio input {
+        margin-right: 10px;
+    }
+    .shift-radio{
+        flex-direction: column;
     }
 }

@@ -43,53 +43,57 @@
             <main class="main">
                 <h1>meal management</h1>            
                 <div class="main-content-wrapper">
-                        <div class="meal-calendar top">
-                            <h2>view meals</h2>
-                            <div class="calendar-wrapper">
-                                <div id="mealCalendar" class="vanilla-calendar"></div>
-                            </div>
-                            <!-- <form class="" action="#" method="POST">
-                                <div class="btn-wrapper">                           
-                                    <button class="onhover-bg-color btn ">view</button>
-                                </div>
-                            </form> -->
-                            <!-- <form class="" action="#" method="POST">   
-                                <div class="date">
-                                    <label>from:</label>
-                                    <input type="date">
-                                </div>
-                                <div class="date">
-                                    <label>to:</label>
-                                    <input type="date">
-                                </div>                         
-                                <button class="onhover-bg-color btn btn-create">view</button>
-                            </form> -->
+                    <div class="meal-calendar top">
+                        <h2>view meals</h2>
+                        <div class="calendar-wrapper">
+                            <div id="mealCalendar" class="vanilla-calendar"></div>
                         </div>
+                        <!-- <form class="" action="#" method="POST">
+                            <div class="btn-wrapper">                           
+                                <button class="onhover-bg-color btn ">view</button>
+                            </div>
+                        </form> -->
+                        <!-- <form class="" action="#" method="POST">   
+                            <div class="date">
+                                <label>from:</label>
+                                <input type="date">
+                            </div>
+                            <div class="date">
+                                <label>to:</label>
+                                <input type="date">
+                            </div>                         
+                            <button class="onhover-bg-color btn btn-create">view</button>
+                        </form> -->
+                    </div>
                     <div class="visible bottom">
                         <h2>meal selected</h2>
                         <form class="" action="#" method="POST">
-                            <div class="select">
-                                <label>breakfast:</label><select>
-                                    <option value="volvo">Veg</option>
-                                    <option value="saab">Non Veg</option>
-                                    <option value="mercedes">None</option>
-                                </select>
-                            </div>   
-                            <div class="select">
+                            <div class="shift-radio">
+                                <label>breakfast:</label>
+                                <div><input type="radio" name="BmealType" value="0"> None</div>
+                                <div><input type="radio" name="BmealType" value="1"> Veg</div>
+                                <div><input type="radio" name="BmealType" value="2"> Non Veg</div>
+                            </div>
+                            <div class="shift-radio">
+                                <label>lunch:</label>
+                                <div><input type="radio" name="LmealType" value="0"> None</div>
+                                <div><input type="radio" name="LmealType" value="1"> Veg</div>
+                                <div><input type="radio" name="LmealType" value="2"> Non Veg</div>
+                            </div>
+                            <div class="shift-radio">
+                                <label>dinner:</label>
+                                <div><input type="radio" name="DmealType" value="0"> None</div>
+                                <div><input type="radio" name="DmealType" value="1"> Veg</div>
+                                <div><input type="radio" name="DmealType" value="2"> Non Veg</div>
+                            </div>
+                            <!-- <div class="select">
                                 <label>lunch:</label><select>
                                     <option value="volvo">Veg</option>
                                     <option value="saab">Non Veg</option>
                                     <option value="mercedes">None</option>
                                 </select>
-                            </div> 
-                            <div class="select">
-                                <label>dinner:</label><select>
-                                    <option value="volvo">Veg</option>
-                                    <option value="saab">Non Veg</option>
-                                    <option value="mercedes">None</option>
-                                </select>
-                            </div>                          
-                            <button class="onhover-bg-color btn btn-create">update</button>
+                            </div>  -->
+                            <button onclick="updateMeals()" type="submit" id="submit-btn" class="onhover-bg-color btn btn-create">update</button>
                         </form>
                         <!-- <div>
                             <span>breakfast</span>
@@ -129,18 +133,86 @@
             //     console.log(data,elem)
             // }
         })
-        calendar.set({onSelect:(data, elem) => {
-                console.log(data,elem)
-            }});
-        
-        // (function(){
-        //     sendRequest('GET', '/profile/userprofile', (res) => {
-        //         // console.log("in ajax call", res);
-        //         document.getElementById('user-name').innerHTML = res.username;
-        //     })
-        // })();
 
-        
+        var eleB = document.getElementsByName('BmealType'); 
+        var eleL = document.getElementsByName('LmealType'); 
+        var eleD = document.getElementsByName('DmealType'); 
+        var date;
+        calendar.set({onSelect:(data, elem) => {
+            // let d= new Date(data.date);
+            // date=d.getTime();
+            // var d = new Date(m);
+
+            // var n = d.getTime();
+            date=formatDateToServer(data.date);
+            data.date=date;
+            // console.log(data,elem);
+            sendRequest('POST', '/profile/fetchMealDetails', (res) => {
+                // console.log(res);
+                // res.emails.forEach(function(email){
+                //     // console.log(email);
+                //     let option = document.createElement("option");
+                //     option.value=email;
+                //     option.innerHTML=email;
+                //     emailDataList.appendChild(option); 
+                // });
+                
+            }, data);  
+        }});
+        document.getElementById("submit-btn").addEventListener("click", function(event){
+            event.preventDefault()
+        });
+        function formatDateToClient(input) {
+            var datePart = input.match(/\d+/g),
+            year = datePart[0].substring(2), // get only two digits
+            month = datePart[1], day = datePart[2];
+
+            return day+'/'+month+'/'+year;
+        }
+
+        function formatDateToServer(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+        function updateMeals(){
+            // console.log("date: ",date);
+            let shift=[];
+            for(i = 0; i < eleB.length; i++) { 
+                if(eleB[i].checked) 
+                    shift.push(eleB[i].value); 
+            }
+            for(i = 0; i < eleL.length; i++) { 
+                if(eleL[i].checked) 
+                    shift.push(eleL[i].value); 
+            }
+            for(i = 0; i < eleD.length; i++) { 
+                if(eleD[i].checked) 
+                    shift.push(eleD[i].value); 
+            }
+            // console.log(shift);  
+            let data={
+                "date": date,
+                "shift": shift
+            };
+            sendRequest('POST', '/profile/setMealDetails', (res) => {
+                // console.log(res.sameDateFound);
+                if(res.sameDateFound){
+                    alert("Meal Request Updated!");
+                }
+                else{
+                    alert("Meal Request Added!");
+                }
+            }, data);
+        }
     </script>
 </body>
 </html>

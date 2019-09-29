@@ -87,14 +87,6 @@
     </div>
     <script src="/script/main.js"></script>
     <script>
-        
-        
-        // (function(){
-        //     sendRequest('GET', '/profile/userprofile', (res) => {
-        //         // console.log("in ajax call", res);
-        //         document.getElementById('user-name').innerHTML = res.username;
-        //     })
-        // })();
         document.getElementById("submit-btn").addEventListener("click", function(event){
             event.preventDefault()
         });
@@ -115,12 +107,12 @@
         function sendEmail(){
             // e.preventDefault();
             let email=document.getElementById("email-list").value;
-            console.log(email);
+            // console.log(email);
             if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
             {
                 // return (true)
                 sendRequest('POST', '/profile/removeguest', (res) => {
-                    console.log(res);
+                    // console.log(res);
                     if(res.exists){
                         alert(email+" successfully removed!");
                     }
