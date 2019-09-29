@@ -139,6 +139,7 @@
         var eleD = document.getElementsByName('DmealType'); 
         var date;
         calendar.set({onSelect:(data, elem) => {
+            
             // let d= new Date(data.date);
             // date=d.getTime();
             // var d = new Date(m);
@@ -148,15 +149,45 @@
             data.date=date;
             // console.log(data,elem);
             sendRequest('POST', '/profile/fetchMealDetails', (res) => {
-                // console.log(res);
-                // res.emails.forEach(function(email){
-                //     // console.log(email);
-                //     let option = document.createElement("option");
-                //     option.value=email;
-                //     option.innerHTML=email;
-                //     emailDataList.appendChild(option); 
-                // });
-                
+                console.log(res);
+                if(res.userReqMeal){
+                    for(i = 0; i < eleB.length; i++) { 
+                        if(eleB[i].value===res.shift[0]){
+                            console.log("check: ", eleB[i].value);
+                            eleB[i].checked=true;
+                        }
+                    }
+                    for(i = 0; i < eleL.length; i++) { 
+                        if(eleL[i].value===res.shift[1]){
+                            console.log("check: ", eleL[i].value);
+                            eleL[i].checked=true;
+                        }
+                    }
+                    for(i = 0; i < eleD.length; i++) { 
+                        if(eleD[i].value===res.shift[2]){
+                            console.log("check: ", eleD[i].value);
+                            eleD[i].checked=true;
+                        }
+                    }
+                }
+                else{
+                    //user didn't req meal on that date
+                    for(i = 0; i < eleB.length; i++) { 
+                        if(eleB[i].checked){
+                            eleB[i].checked=false;
+                        }
+                    }
+                    for(i = 0; i < eleL.length; i++) { 
+                        if(eleL[i].checked){
+                            eleL[i].checked=false;
+                        }
+                    }
+                    for(i = 0; i < eleD.length; i++) { 
+                        if(eleD[i].checked){
+                            eleD[i].checked=false;
+                        }
+                    }
+                }                
             }, data);  
         }});
         document.getElementById("submit-btn").addEventListener("click", function(event){

@@ -131,7 +131,39 @@ router.post('/removeguest', authCheck, (req, res) => {
 router.post('/fetchMealDetails', authCheck, (req, res) => {
     console.log(req.body.date);
     console.log(req.user);
-
+    // db.scores.find(
+    //     { results: { $elemMatch: { $gte: 80, $lt: 85 } } }
+    //  )   
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    let userReqMeal=false;  
+    Meal.findOne({$and: [{useremail: req.user.useremail},{ mealsTaken: { $elemMatch: { date: req.body.date}}}]})
+    .then((userTookMeal)=>{
+        if(userTookMeal){
+            userReqMeal=true;
+            userTookMeal.mealsTaken.forEach(fn);
+            function fn(obj, objIndex, mealsTakenArray){
+                if(obj.date === req.body.date){
+                    // console.log(obj.shift);
+                    let resObj={
+                        shift: obj.shift,
+                        userReqMeal: userReqMeal,
+                        user: req.user
+                    };
+                    res.end(JSON.stringify(resObj));
+                }
+            }
+        }
+        else{
+            //user didn't request meal for that date
+            let resObj={
+                userReqMeal: userReqMeal,
+                user: req.user
+            };
+            res.end(JSON.stringify(resObj));
+        }
+    })
     // let emails=[];
     // User.find({isAdmin: false}).exec()
     // .then(function(guests){
@@ -144,10 +176,10 @@ router.post('/fetchMealDetails', authCheck, (req, res) => {
     //     }
     //     console.log(data);
     // });
-    res.writeHead(200, {
-        'Content-Type': 'application/json'
-    });
-    res.end(JSON.stringify(req.user));
+    // res.writeHead(200, {
+    //     'Content-Type': 'application/json'
+    // });
+    // res.end(JSON.stringify(req.user));
 });
 
 router.post('/setMealDetails', authCheck, (req, res) => {
