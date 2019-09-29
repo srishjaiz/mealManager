@@ -50,16 +50,16 @@
                     <div class="top">
                         <h2>meals</h2>
                         <form class="" action="#" method="POST">
-                            <div class="select">
+                            <!-- <div class="select">
                                 <label>shift:</label><select>
                                     <option value="volvo">Breakfast</option>
                                     <option value="saab">Lunch</option>
                                     <option value="mercedes">Dinner</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="datalist">
                                 <label>shift:</label>
-                                <input list="shift">
+                                <input id="shift-list" list="shift">
                                 <datalist id="shift">
                                     <option value="Breakfast">
                                     <option value="Lunch">
@@ -68,23 +68,23 @@
                             </div>
                             <div class="date">
                                 <label>date:</label>
-                                <input type="date">
+                                <input id="date" type="date">
                             </div>
-                            <button class="onhover-bg-color btn">get details</button>
+                            <button onclick="getMealsReq()" type="submit" id="submit-btn-1" class="onhover-bg-color btn">get details</button>
                         </form>
                     </div>
                     <div class="bottom visible">
                         <h2>meals required</h2>
                         <div>
                             <span>veg</span>
-                            <span>5</span>
+                            <span id="veg">0</span>
                         </div>
                         <div>
                             <span>non veg</span>
-                            <span>4</span>
+                            <span id="nonveg">0</span>
                         </div>
                         <form class="" action="#" method="POST">                        
-                            <button class="onhover-bg-color btn btn-create">done</button>
+                            <button onclick="updateMealCosts()" type="submit" id="submit-btn-2" class="onhover-bg-color btn btn-create">done</button>
                         </form>
                     </div>
                 </div>
@@ -100,5 +100,56 @@
        </div>
     </div>
     <script src="/script/main.js"></script>
+    <script>
+        document.getElementById("submit-btn-1").addEventListener("click", function(event){
+            event.preventDefault()
+        });
+        document.getElementById("submit-btn-2").addEventListener("click", function(event){
+            event.preventDefault()
+        });
+
+        var shiftList = document.getElementById('shift-list');
+        var date = document.getElementById('date'); 
+        var veg = document.getElementById('veg'); 
+        var nonveg = document.getElementById('nonveg'); 
+
+
+        function getMealsReq(){
+            // console.log(shiftList.value, date.value);
+            // let map={
+            //     Breakfast: 0,
+            //     Lunch: 1,
+            //     Dinner: 2
+            // }
+            let shiftInput;
+            if(shiftList.value=="Breakfast" || shiftList.value=="Lunch" || shiftList.value=="Dinner"){
+                shiftInput=shiftList.value;
+            }
+            else{
+                alert("Enter valid shift!");
+                return;
+            }
+            let data={
+                date: date.value,
+                shiftInput: shiftInput
+            }
+            sendRequest('POST', '/profile/fetchMealsRequired', (res) => {
+                // console.log(res);
+                if(res.mealReqFound){
+                    veg.innerHTML=res.veg;
+                    nonveg.innerHTML=res.nonveg;
+                }
+                else{
+                    //no meal req found on that date
+                    veg.innerHTML=0;
+                    nonveg.innerHTML=0;
+                }                
+            }, data); 
+        }
+        function updateMealCosts(){
+
+        }
+    
+    </script>
 </body>
 </html>

@@ -276,4 +276,63 @@ router.post('/setMealDetails', authCheck, (req, res) => {
     // res.end(JSON.stringify(resObj));
     // res.end(JSON.stringify(req.user));
 });
+
+
+
+router.post('/fetchMealsRequired', authCheck, (req, res) => {
+    console.log(req.body);
+    console.log(req.user);
+    let shiftIndex;
+    if(req.body.shiftInput=="Lunch")shiftIndex=1
+    else if(req.body.shiftInput=="Breakfast")shiftIndex=0
+    else if(req.body.shiftInput=="Dinner")shiftIndex=2
+    else shiftIndex=-1
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    let mealReqFound=false;  
+    let veg=0,nonveg=0;
+    Meal.find({ mealsTaken: { $elemMatch: { date: req.body.date}}}).exec()
+    .then((usersReqMeal)=>{
+        // console.log("users:",usersReqMeal);
+        if(usersReqMeal[0]){
+            mealReqFound=true;
+            usersReqMeal.forEach((userReqMeal)=>{
+                // console.log("user",userReqMeal);
+                userReqMeal.mealsTaken.forEach(fn);
+                function fn(obj, objIndex, mealsTakenArray){
+                    if(obj.date === req.body.date){
+                        // console.log(obj.shift);
+                        obj.shift.forEach((mealType, index)=>{
+                            // console.log("mealType:",mealType, "index:", index);
+                            if(mealType==1 && index==shiftIndex){
+                                veg++;
+                            }
+                            else if(mealType==2 && index==shiftIndex){
+                                nonveg++;
+                            }
+                        })
+                    }
+                }
+            })
+            let resObj={
+                veg: veg,
+                nonveg: nonveg,
+                mealReqFound: mealReqFound,
+                user: req.user
+            };
+            res.end(JSON.stringify(resObj));
+        }
+        else{
+            console.log("no meal req found");
+            let resObj={
+                mealReqFound: mealReqFound,
+                user: req.user
+            };
+            res.end(JSON.stringify(resObj));
+        }
+    })
+});
+
+
 module.exports = router;

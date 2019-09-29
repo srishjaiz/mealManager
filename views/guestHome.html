@@ -139,7 +139,7 @@
         var eleD = document.getElementsByName('DmealType'); 
         var date;
         calendar.set({onSelect:(data, elem) => {
-            
+
             // let d= new Date(data.date);
             // date=d.getTime();
             // var d = new Date(m);
@@ -189,6 +189,7 @@
                     }
                 }                
             }, data);  
+            
         }});
         document.getElementById("submit-btn").addEventListener("click", function(event){
             event.preventDefault()
@@ -242,6 +243,7 @@
                 else{
                     alert("Meal Request Added!");
                 }
+                window.location.reload();
             }, data);
         }
     </script>
