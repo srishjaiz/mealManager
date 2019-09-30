@@ -175,6 +175,7 @@ nav > div:first-child{
     /* padding-top: 30px; */
     margin-top: 10px;
     margin-bottom: 10px;
+    width: 80px;
 }
 .logo a {
     display: block;
@@ -279,7 +280,7 @@ nav h4 {
 /* .list-below a:hover{
 } */
 .list-below:hover {
-    background-color: #929292;
+    background-color: #3d838a;
 }
 .list-below:hover a{
     color: #fff;
@@ -317,7 +318,14 @@ main > h1 {
 .main-content-wrapper > div {
     background: #f8f8f8;
     min-width: 550px;
+    border: 20px solid #3d838a;
+    /* padding-bottom: 50px; */
+    box-shadow: 0 0 40px #000;
     /* min-height: 300px; */
+    /* padding-bottom: 50px; */
+}
+.main-content-wrapper > div > div {
+    width: 100%;
     padding-bottom: 50px;
 }
 .top {
@@ -348,7 +356,7 @@ main > h1 {
 }
 
 button:hover{
-    background: #212f44;
+    background: #3d838a;
     color: #fff;
 }
 .select {
@@ -388,7 +396,7 @@ button:hover{
 @media only screen and (max-width: 600px) {
     .main-content-wrapper > div {
         min-width: 100%;
-        padding-bottom: 30px;
+        /* padding-bottom: 30px; */
         /* min-height: 300px; */
     }
     .main-content-wrapper {

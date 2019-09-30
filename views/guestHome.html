@@ -22,7 +22,7 @@
     <div class="container">
         <nav class="navbar sidenav" id="mySidenav">
             <div class="logo hidden">
-                <img src="https://via.placeholder.com/80">
+                <img id="user-image" src="https://via.placeholder.com/80">
                 <!-- <a href="#">User Name</a> -->
                 <a href="#" id="user-name">User Name</a>
             </div>
@@ -43,6 +43,7 @@
             <main class="main">
                 <h1>meal management</h1>            
                 <div class="main-content-wrapper">
+                    <div class="border-div">
                     <div class="meal-calendar top">
                         <h2>request meals</h2>
                         <div class="calendar-wrapper">
@@ -111,6 +112,7 @@
                             <button class="onhover-bg-color btn btn-create">ok</button>
                         </form> -->
                     </div>
+                    </div>
                 </div>
             </main>
             <div class="list-below">
@@ -147,7 +149,7 @@
             // var n = d.getTime();
             date=formatDateToServer(data.date);
             data.date=date;
-            
+
             // console.log(data,elem);
             sendRequest('POST', '/profile/fetchMealDetails', (res) => {
                 // console.log(res);

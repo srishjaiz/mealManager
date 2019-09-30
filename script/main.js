@@ -73,7 +73,8 @@ function sendRequest(method, url, cb, data) {
 }    
 (function(){
     sendRequest('GET', '/profile/userprofile', (res) => {
-        // console.log("in ajax call", res);
+        // console.log("in ajax call", res.userpic);
         document.getElementById('user-name').innerHTML = res.username;
+        document.getElementById("user-image").src= res.userpic;
     })
 })();

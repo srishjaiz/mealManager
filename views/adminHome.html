@@ -20,7 +20,7 @@
     <div class="container">
         <nav class="navbar sidenav" id="mySidenav">
             <div class="logo hidden">
-                <img src="https://via.placeholder.com/80">
+                <img id="user-image" src="https://via.placeholder.com/80">
                 <!-- <a href="#">User Name</a> -->
                 <a href="#" id="user-name">User Name</a>
             </div>
@@ -47,6 +47,7 @@
             <main class="main">
                 <h1>meal details</h1>            
                 <div class="main-content-wrapper">
+                    <div class="border-div">
                     <div class="top">
                         <h2>meals</h2>
                         <form class="" action="#" method="POST">
@@ -88,6 +89,7 @@
                         </form>
                     </div>
                 </div>
+                </div>
             </main>
             <div class="list-below">
                 <ul>
@@ -108,6 +110,8 @@
             event.preventDefault()
         });
 
+        // document.getElementById("myImg").src = "hackanm.gif";
+        // var userImage= document.getElementById("user-image");
         var shiftList = document.getElementById('shift-list');
         var date = document.getElementById('date'); 
         var veg = document.getElementById('veg'); 
