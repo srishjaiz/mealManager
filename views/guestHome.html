@@ -44,7 +44,7 @@
                 <h1>meal management</h1>            
                 <div class="main-content-wrapper">
                     <div class="meal-calendar top">
-                        <h2>view meals</h2>
+                        <h2>request meals</h2>
                         <div class="calendar-wrapper">
                             <div id="mealCalendar" class="vanilla-calendar"></div>
                         </div>
@@ -147,6 +147,7 @@
             // var n = d.getTime();
             date=formatDateToServer(data.date);
             data.date=date;
+            
             // console.log(data,elem);
             sendRequest('POST', '/profile/fetchMealDetails', (res) => {
                 // console.log(res);

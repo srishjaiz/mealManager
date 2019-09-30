@@ -99,6 +99,11 @@ ul{
 .container {
     display: flex;
     flex-direction: row;
+    background-image: url(/images/pic2.jpeg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
     /* height: 100vh; */
 }
   
@@ -111,6 +116,7 @@ ul{
     flex: auto;  
     margin-left: 0;
     transition: 0.5s;
+    background-color: rgba(0,0,0,0.1);
 }
 
 .sidenav {
@@ -250,7 +256,8 @@ nav h4 {
 }
 .main{
     /* margin-left: 40px; */
-    background-color: #5f7586;
+    background-color: rgba(0,0,0,0.5);
+    min-height: 100vh;
     /* height: 100vh; */
 }
 .list-below {
