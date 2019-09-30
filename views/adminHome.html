@@ -115,7 +115,7 @@
         var shiftList = document.getElementById('shift-list');
         var date = document.getElementById('date'); 
         var veg = document.getElementById('veg'); 
-        var nonveg = document.getElementById('nonveg'); 
+        var nonveg = document.getElementById('nonveg');
 
         let data;
         function getMealsReq(){
@@ -150,6 +150,7 @@
                     veg.innerHTML=0;
                     nonveg.innerHTML=0;
                 }                
+                visible.style.display='block';
             }, data); 
         }
         function updateMealCosts(){
@@ -161,7 +162,8 @@
                 else{
                     //no meal req found on that date
                     alert("No meal request found for the selected date!");
-                }                
+                }             
+                window.location.reload();   
             }, data);
         }
     

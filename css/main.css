@@ -24,7 +24,9 @@ ul{
     margin: 0;
     list-style: none;
 }
-
+.visible{
+    display: none;
+}
 /* index page */
 
 .banner{

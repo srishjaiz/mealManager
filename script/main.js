@@ -3,6 +3,8 @@ var el=document.getElementById("mySidenav");
 var closebtn=document.getElementById("closebtn");
 var dropdown = document.getElementsByClassName("dropdown-btn");
 var c = document.getElementsByClassName("hidden"); 
+var visible = document.getElementsByClassName('visible')[0]; 
+
 // setTimeout(() => {
 //     for (i = 0; i < c.length; i++) {
 //         c[i].style.display="block";
