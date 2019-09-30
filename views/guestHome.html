@@ -128,12 +128,12 @@
         // let obj={};
         let calendar = new VanillaCalendar({
             selector: "#mealCalendar",
-            pastDates: true,
+            pastDates: false,
             // onSelect: (data, elem) => {
             //     console.log(data,elem)
             // }
         })
-
+        // calendar.set({pastDates: false});
         var eleB = document.getElementsByName('BmealType'); 
         var eleL = document.getElementsByName('LmealType'); 
         var eleD = document.getElementsByName('DmealType'); 
@@ -149,7 +149,7 @@
             data.date=date;
             // console.log(data,elem);
             sendRequest('POST', '/profile/fetchMealDetails', (res) => {
-                console.log(res);
+                // console.log(res);
                 if(res.userReqMeal){
                     for(i = 0; i < eleB.length; i++) { 
                         if(eleB[i].value===res.shift[0]){
@@ -189,7 +189,7 @@
                     }
                 }                
             }, data);  
-            
+
         }});
         document.getElementById("submit-btn").addEventListener("click", function(event){
             event.preventDefault()

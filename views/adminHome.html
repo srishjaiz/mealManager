@@ -115,12 +115,6 @@
 
         let data;
         function getMealsReq(){
-            // console.log(shiftList.value, date.value);
-            // let map={
-            //     Breakfast: 0,
-            //     Lunch: 1,
-            //     Dinner: 2
-            // }
             let shiftInput;
             if(shiftList.value=="Breakfast" || shiftList.value=="Lunch" || shiftList.value=="Dinner"){
                 shiftInput=shiftList.value;
@@ -129,8 +123,16 @@
                 alert("Enter valid shift!");
                 return;
             }
+            let dateInput;
+            if(date.value){
+                dateInput=date.value;
+            }
+            else{
+                alert("Select a date!");
+                return;
+            }
             data={
-                date: date.value,
+                date: dateInput,
                 shiftInput: shiftInput
             }
             sendRequest('POST', '/profile/fetchMealsRequired', (res) => {

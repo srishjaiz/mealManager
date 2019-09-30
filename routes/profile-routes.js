@@ -107,20 +107,31 @@ router.post('/removeguest', authCheck, (req, res) => {
     res.writeHead(200, {
         'Content-Type': 'application/json'
     });
-    let data={};
     User.deleteOne({useremail: req.body.guestEmail}).then((removedUser)=>{
         if(removedUser.n){
             // console.log("user removed");
-            data={
-                exists: true
-            }
+
+            Meal.deleteOne({useremail: req.body.guestEmail}).then((removedMeal)=>{
+                if(removedMeal.n){
+                    let data={
+                        exists: true
+                    }
+                    res.end(JSON.stringify(data));            
+
+                }
+                else{
+                    //meal not exist for the user
+                    console.log("Meal doesn't not exist for selected guest")
+                }
+            });
         }
         else{
-            data={
+            console.log("guest doesn't not exist")
+            let data={
                 exists: false
             }
+            res.end(JSON.stringify(data));            
         }
-        res.end(JSON.stringify(data));            
     });    
     
     
