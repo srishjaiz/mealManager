@@ -51,22 +51,6 @@
                     <div class="top">
                         <h2>meals</h2>
                         <form class="" action="#" method="POST">
-                            <!-- <div class="select">
-                                <label>shift:</label><select>
-                                    <option value="volvo">Breakfast</option>
-                                    <option value="saab">Lunch</option>
-                                    <option value="mercedes">Dinner</option>
-                                </select>
-                            </div> -->
-                            <!-- <div class="datalist">
-                                <label>shift:</label>
-                                <input id="shift-list" list="shift">
-                                <datalist id="shift">
-                                    <option value="Breakfast">
-                                    <option value="Lunch">
-                                    <option value="Dinner">
-                                </datalist>  
-                            </div> -->
                             <div class="shift-radio">
                                 <label>shift:</label><br>
                                 <div><input type="radio" name="shift" value="Breakfast" checked> Breakfast</div>
@@ -115,10 +99,6 @@
         document.getElementById("submit-btn-2").addEventListener("click", function(event){
             event.preventDefault()
         });
-
-        // document.getElementById("myImg").src = "hackanm.gif";
-        // var userImage= document.getElementById("user-image");
-        // var shiftList = document.getElementById('shift-list');
         var shiftList = document.getElementsByName('shift'); 
         var date = document.getElementById('date'); 
         let currentDate=formatDateToServer(new Date());
@@ -147,13 +127,6 @@
                     shiftInput=shiftList[i].value;
                 }
             }
-            // if(shiftList.value=="Breakfast" || shiftList.value=="Lunch" || shiftList.value=="Dinner"){
-            //     shiftInput=shiftList.value;
-            // }
-            // else{
-            //     alert("Enter valid shift!");
-            //     return;
-            // }
             let dateInput;
             if(date.value){
                 dateInput=date.value;

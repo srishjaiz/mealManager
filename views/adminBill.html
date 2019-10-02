@@ -237,7 +237,7 @@
                                 gTotal.innerHTML=totalCost;
                             }
                             else{
-                                alert("No meal supplied to the guest during the selected period!");
+                                alert("No dues found for the guest during the selected period!");
                             }
                         }
                         else{
@@ -258,7 +258,47 @@
             alert("Please enter a valid email address!");
         }
     }
-
+    
+    function resetCost(){
+        let email=document.getElementById("email-list").value;
+        let fromDate=document.getElementById("from-date").value;
+        let toDate=document.getElementById("to-date").value;
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+            if(fromDate && toDate){
+                if(fromDate <= toDate){
+                    let data={
+                        email: email,
+                        fromDate: fromDate,
+                        toDate: toDate
+                    }
+                    sendRequest('POST', '/profile/resetMealCost', (res) => {
+                        console.log("paid: ",res);
+                        if(res.guestFound){
+                            if(res.costReset){
+                                alert("Bill marked as paid for the guest for the selected period!")
+                            }
+                            else{
+                                alert("Bill is already paid by the guest during the selected period!")
+                            }
+                        }
+                        else{
+                            alert("Guest does not exist!");
+                        }
+                        window.location.reload();   
+                    }, data);
+                }
+                else{
+                    alert("Please select a from date cannot be lesser than to date!");
+                }
+            }
+            else{
+                alert("Please select a valid date!");
+            }
+        }
+        else{
+            alert("Please enter a valid email address!");
+        }
+    }
     </script>
 </body>
 </html>

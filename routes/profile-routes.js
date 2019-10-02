@@ -710,18 +710,6 @@ router.post('/fetchBillAdmin', authCheck, (req, res) => {
             res.end(JSON.stringify(data));
         }
     })
-    // let emails=[];
-    // User.find({isAdmin: false}).exec()
-    // .then(function(guests){
-    //     guests.forEach(function(guest){
-    //         // console.log(guest.useremail);
-    //         emails.push(guest.useremail);
-    //     });
-    //     data={
-    //         emails: emails
-    //     }
-    //     console.log(data);
-    // });
 });
 
 router.post('/fetchBill', authCheck, (req, res) => {
@@ -765,5 +753,58 @@ router.post('/fetchBill', authCheck, (req, res) => {
     //     }
     //     console.log(data);
     // });
+});
+
+router.post('/resetMealCost', authCheck, (req, res) => {
+    console.log(req.body);
+    // console.log(req.user);
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    let guestFound=false,costReset=false;
+    Meal.findOne({useremail: req.body.email}).exec()
+    .then((guestDetails)=>{
+        if(guestDetails){
+            guestFound=true;
+            // console.log(guestDetails);
+            guestDetails.mealsTaken.forEach((mealObj)=>{
+            if(mealObj.date >= req.body.fromDate && mealObj.date <= req.body.toDate){
+            console.log(mealObj);
+            if(mealObj.cost){
+                Meal.update(
+                {$and: [{useremail: req.body.email},{"mealsTaken.date": mealObj.date}]},
+                { $set: { "mealsTaken.$.cost": 0}}
+                )
+                .then((updated)=>{
+                    if(updated.n){
+                        costReset=true;
+                        console.log("cost reset");
+                    }
+                    else{
+                        console.log("cost not reset");
+                    }
+                    let data={
+                        guestFound: guestFound,
+                        costReset: costReset,
+                        currentUser: req.user
+                    }
+                    res.end(JSON.stringify(data));
+                    })
+                }
+                else{
+                    console.log("cost already 0");
+                }
+            }
+        });
+        }
+        else{
+            console.log("guest doesn't exist!");
+            let data={
+                guestFound: guestFound,
+                currentUser: req.user
+            }
+            res.end(JSON.stringify(data));
+        }
+    })
 });
 module.exports = router;

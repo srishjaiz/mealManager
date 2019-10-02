@@ -49,22 +49,6 @@
                         <div class="calendar-wrapper">
                             <div id="mealCalendar" class="vanilla-calendar"></div>
                         </div>
-                        <!-- <form class="" action="#" method="POST">
-                            <div class="btn-wrapper">                           
-                                <button class="onhover-bg-color btn ">view</button>
-                            </div>
-                        </form> -->
-                        <!-- <form class="" action="#" method="POST">   
-                            <div class="date">
-                                <label>from:</label>
-                                <input type="date">
-                            </div>
-                            <div class="date">
-                                <label>to:</label>
-                                <input type="date">
-                            </div>                         
-                            <button class="onhover-bg-color btn btn-create">view</button>
-                        </form> -->
                     </div>
                     <div class="visible bottom">
                         <h2>meal selected</h2>
@@ -96,21 +80,6 @@
                             </div>  -->
                             <button onclick="updateMeals()" type="submit" id="submit-btn" class="onhover-bg-color btn btn-create">update</button>
                         </form>
-                        <!-- <div>
-                            <span>breakfast</span>
-                            <span>veg</span>
-                        </div>
-                        <div>
-                            <span>lunch</span>
-                            <span>non veg</span>
-                        </div>
-                        <div>
-                            <span>dinner</span>
-                            <span>non veg</span>
-                        </div> -->
-                        <!-- <form class="" action="#" method="POST">                        
-                            <button class="onhover-bg-color btn btn-create">ok</button>
-                        </form> -->
                     </div>
                     </div>
                 </div>
@@ -130,10 +99,7 @@
         // let obj={};
         let calendar = new VanillaCalendar({
             selector: "#mealCalendar",
-            pastDates: false,
-            // onSelect: (data, elem) => {
-            //     console.log(data,elem)
-            // }
+            pastDates: false
         })
         // calendar.set({pastDates: false});
         var eleB = document.getElementsByName('BmealType'); 
@@ -142,11 +108,6 @@
         var date;
         calendar.set({onSelect:(data, elem) => {
 
-            // let d= new Date(data.date);
-            // date=d.getTime();
-            // var d = new Date(m);
-
-            // var n = d.getTime();
             date=formatDateToServer(data.date);
             data.date=date;
 
@@ -237,10 +198,6 @@
                 if(eleD[i].checked) 
                     shift.push(eleD[i].value); 
             }
-            // console.log(shift);  
-            // if(shift.length<3){
-            //     alert("select value for all shifts")
-            // }
             let data={
                 "date": date,
                 "shift": shift
