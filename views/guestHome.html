@@ -71,19 +71,19 @@
                         <form class="" action="#" method="POST">
                             <div class="shift-radio">
                                 <label>breakfast:</label>
-                                <div><input type="radio" name="BmealType" value="0"> None</div>
+                                <div><input type="radio" name="BmealType" value="0" checked> None</div>
                                 <div><input type="radio" name="BmealType" value="1"> Veg</div>
                                 <div><input type="radio" name="BmealType" value="2"> Non Veg</div>
                             </div>
                             <div class="shift-radio">
                                 <label>lunch:</label>
-                                <div><input type="radio" name="LmealType" value="0"> None</div>
+                                <div><input type="radio" name="LmealType" value="0" checked> None</div>
                                 <div><input type="radio" name="LmealType" value="1"> Veg</div>
                                 <div><input type="radio" name="LmealType" value="2"> Non Veg</div>
                             </div>
                             <div class="shift-radio">
                                 <label>dinner:</label>
-                                <div><input type="radio" name="DmealType" value="0"> None</div>
+                                <div><input type="radio" name="DmealType" value="0" checked> None</div>
                                 <div><input type="radio" name="DmealType" value="1"> Veg</div>
                                 <div><input type="radio" name="DmealType" value="2"> Non Veg</div>
                             </div>
@@ -156,38 +156,41 @@
                 if(res.userReqMeal){
                     for(i = 0; i < eleB.length; i++) { 
                         if(eleB[i].value===res.shift[0]){
-                            console.log("check: ", eleB[i].value);
+                            // console.log("check: ", eleB[i].value);
                             eleB[i].checked=true;
                         }
                     }
                     for(i = 0; i < eleL.length; i++) { 
                         if(eleL[i].value===res.shift[1]){
-                            console.log("check: ", eleL[i].value);
+                            // console.log("check: ", eleL[i].value);
                             eleL[i].checked=true;
                         }
                     }
                     for(i = 0; i < eleD.length; i++) { 
                         if(eleD[i].value===res.shift[2]){
-                            console.log("check: ", eleD[i].value);
+                            // console.log("check: ", eleD[i].value);
                             eleD[i].checked=true;
                         }
                     }
                 }
                 else{
-                    //user didn't req meal on that date
+                    // user didn't req meal on that date
                     for(i = 0; i < eleB.length; i++) { 
                         if(eleB[i].checked){
                             eleB[i].checked=false;
+                            eleB[0].checked=true;
                         }
                     }
                     for(i = 0; i < eleL.length; i++) { 
                         if(eleL[i].checked){
                             eleL[i].checked=false;
+                            eleL[0].checked=true;
                         }
                     }
                     for(i = 0; i < eleD.length; i++) { 
                         if(eleD[i].checked){
                             eleD[i].checked=false;
+                            eleD[0].checked=true;
                         }
                     }
                 }                
@@ -235,6 +238,9 @@
                     shift.push(eleD[i].value); 
             }
             // console.log(shift);  
+            // if(shift.length<3){
+            //     alert("select value for all shifts")
+            // }
             let data={
                 "date": date,
                 "shift": shift

@@ -58,7 +58,7 @@
                                     <option value="mercedes">Dinner</option>
                                 </select>
                             </div> -->
-                            <div class="datalist">
+                            <!-- <div class="datalist">
                                 <label>shift:</label>
                                 <input id="shift-list" list="shift">
                                 <datalist id="shift">
@@ -66,6 +66,12 @@
                                     <option value="Lunch">
                                     <option value="Dinner">
                                 </datalist>  
+                            </div> -->
+                            <div class="shift-radio">
+                                <label>shift:</label><br>
+                                <div><input type="radio" name="shift" value="Breakfast" checked> Breakfast</div>
+                                <div><input type="radio" name="shift" value="Lunch"> Lunch</div>
+                                <div><input type="radio" name="shift" value="Dinner"> Dinner</div>
                             </div>
                             <div class="date">
                                 <label>date:</label>
@@ -77,11 +83,11 @@
                     <div class="bottom visible">
                         <h2>meals required</h2>
                         <div>
-                            <span>veg</span>
+                            <span style="text-align: left">veg</span>
                             <span id="veg">0</span>
                         </div>
                         <div>
-                            <span>non veg</span>
+                            <span style="text-align: left">non veg</span>
                             <span id="nonveg">0</span>
                         </div>
                         <form class="" action="#" method="POST">                        
@@ -112,21 +118,42 @@
 
         // document.getElementById("myImg").src = "hackanm.gif";
         // var userImage= document.getElementById("user-image");
-        var shiftList = document.getElementById('shift-list');
+        // var shiftList = document.getElementById('shift-list');
+        var shiftList = document.getElementsByName('shift'); 
         var date = document.getElementById('date'); 
+        let currentDate=formatDateToServer(new Date());
+        date.value=currentDate;
         var veg = document.getElementById('veg'); 
         var nonveg = document.getElementById('nonveg');
-
+        var doneBtn = document.getElementById('submit-btn-2'); 
         let data;
+        function formatDateToServer(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
         function getMealsReq(){
             let shiftInput;
-            if(shiftList.value=="Breakfast" || shiftList.value=="Lunch" || shiftList.value=="Dinner"){
-                shiftInput=shiftList.value;
+            for(i = 0; i < shiftList.length; i++) { 
+                if(shiftList[i].checked){
+                    shiftInput=shiftList[i].value;
+                }
             }
-            else{
-                alert("Enter valid shift!");
-                return;
-            }
+            // if(shiftList.value=="Breakfast" || shiftList.value=="Lunch" || shiftList.value=="Dinner"){
+            //     shiftInput=shiftList.value;
+            // }
+            // else{
+            //     alert("Enter valid shift!");
+            //     return;
+            // }
             let dateInput;
             if(date.value){
                 dateInput=date.value;
@@ -141,23 +168,43 @@
             }
             sendRequest('POST', '/profile/fetchMealsRequired', (res) => {
                 // console.log(res);
+                visible.style.display='block';
                 if(res.mealReqFound){
                     veg.innerHTML=res.veg;
                     nonveg.innerHTML=res.nonveg;
+                    let today=formatDateToServer(new Date());
+                    // console.log(today, dateInput);
+                    if(dateInput > today){
+                        doneBtn.disabled=true;                        
+                    }
+                    else{
+                        if(res.costCalFound ){
+                            doneBtn.disabled=true;
+                            // alert("cost already updated!");
+                        }
+                        else{
+                            doneBtn.disabled=false;
+                        }
+                    }
                 }
                 else{
                     //no meal req found on that date
                     veg.innerHTML=0;
                     nonveg.innerHTML=0;
+                    doneBtn.disabled=true;
                 }                
-                visible.style.display='block';
             }, data); 
         }
         function updateMealCosts(){
             sendRequest('POST', '/profile/updateMealCost', (res) => {
-                console.log("done: ",res);
+                // console.log("done: ",res);
                 if(res.mealReqFound){
-                    alert("Cost of each guest, requested for meal is updated!");
+                    if(!res.costUpdated){
+                        alert("Cost of each guest, requested for meal is updated!");
+                    }
+                    else{
+                        alert("Cost of guests already updated for this shift!");
+                    }
                 }
                 else{
                     //no meal req found on that date

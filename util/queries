@@ -17,3 +17,16 @@ User.find({isAdmin: false}).exec()
       console.log(guest.useremail);
    });
 })
+
+
+{mealsTaken: {date: {$gte: "2019-10-08", $lte: "2019-10-09"}}}
+
+
+{ mealsTaken: { $elemMatch: { date: {$gte: "2019-10-08", $lte: "2019-10-09"}}}}
+
+
+const date1 = new Date('7/13/2010');
+const date2 = new Date('12/15/2010');
+const diffTime = Math.abs(date2 - date1);
+const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+console.log(diffDays);

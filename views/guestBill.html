@@ -47,28 +47,38 @@
                             <form class="" action="#" method="POST">   
                                 <div class="date">
                                     <label>from:</label>
-                                    <input type="date">
+                                    <input id="from-date" type="date">
                                 </div>
                                 <div class="date">
                                     <label>to:</label>
-                                    <input type="date">
+                                    <input id="to-date" type="date">
                                 </div>                         
-                                <button class="onhover-bg-color btn btn-create">view</button>
+                                <button onclick="fetchBill()" type="submit" id="submit-btn" class="onhover-bg-color btn btn-create">view</button>
                             </form>
                         </div>
                     <div class="visible bottom">
                         <h2>bill</h2>
-                        <div>
-                            <span>veg</span>
-                            <span>5</span>
-                        </div>
-                        <div>
-                            <span>non veg</span>
-                            <span>4</span>
-                        </div>
-                        <div>
+                        <div class="bill-div">
+                            <span style="text-align: left">meal type</span>
+                            <span>qty.</span>
+                            <span>cost / qty.</span>
                             <span>total</span>
-                            <span>9</span>
+                        </div>
+                        <div>
+                            <span style="text-align: left">veg</span>
+                            <span id="qty-v">5</span>                        
+                            <span>40</span>
+                            <span id="total-v">200</span>
+                        </div>
+                        <div>
+                            <span style="text-align: left">non-veg</span>
+                            <span id="qty-nv">5</span>                        
+                            <span>60</span>
+                            <span id="total-nv">200</span>
+                        </div>
+                        <div class="bill-div">
+                            <span style="text-align: left">grand total</span>
+                            <span id="grand-total">9</span>
                         </div>
                         <!-- <form class="" action="#" method="POST">                        
                             <button class="onhover-bg-color btn btn-create">ok</button>
@@ -89,7 +99,140 @@
     </div>
     <script src="/script/main.js"></script>
     <script>
-        
+        document.getElementById("submit-btn").addEventListener("click", function(event){
+            event.preventDefault()
+        });
+        function formatDateToServer(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+        window.onload = function() {
+            let d = new Date();
+            let today=formatDateToServer(d);
+            let p = d.setDate(d.getDate()-30);
+            let oneMonthBrfore=formatDateToServer(p);  
+            let fromDate=document.getElementById("from-date");
+            let toDate=document.getElementById("to-date");
+            fromDate.value=oneMonthBrfore;
+            toDate.value= today;
+            toDate.setAttribute('max',today);   
+            fromDate.setAttribute('max',today);             
+        };
+
+        function fetchBill(){
+        // e.preventDefault();
+        // let email=document.getElementById("email-list").value;
+        let fromDate=document.getElementById("from-date").value;
+        let toDate=document.getElementById("to-date").value;
+        let vQty=document.getElementById("qty-v");
+        let nvQty=document.getElementById("qty-nv");
+        let vTotal=document.getElementById("total-v");
+        let nvTotal=document.getElementById("total-nv");
+        let gTotal=document.getElementById("grand-total");
+            // return (true)
+        if(fromDate && toDate){
+            if(fromDate <= toDate){
+                // console.log(fromDate, toDate);
+                let data={
+                    fromDate: fromDate,
+                    toDate: toDate
+                }
+                sendRequest('POST', '/profile/fetchBill', (res) => {
+                    // console.log(res);
+                    // res.guestFound check not required here
+                    let totalCost=0,veg=0,nonveg=0;
+                    res.mealsTaken.forEach((mealObj)=>{
+                        // console.log(mealObj);
+                        if(mealObj.date >= fromDate && mealObj.date <= toDate){
+                            totalCost+=mealObj.cost;
+                            for (let mealShift in mealObj.costCalculated) {
+                                if (mealObj.costCalculated.hasOwnProperty(mealShift)) {
+                                    if(mealObj.costCalculated[mealShift] && mealShift=='l'){
+                                        // console.log(mealShift + " -> " + mealObj.costCalculated[mealShift]);
+                                        mealObj.shift.forEach((mealType, index)=>{
+                                            // console.log(mealType, index);
+                                            if(mealType==1 && index==1){
+                                                veg++;
+                                            }
+                                            else if(mealType==2 && index==1){
+                                                nonveg++;
+                                            }
+                                        })
+                                    }
+                                    else if(mealObj.costCalculated[mealShift] && mealShift=='b'){
+                                        // console.log(mealShift + " -> " + mealObj.costCalculated[mealShift]);
+                                        mealObj.shift.forEach((mealType, index)=>{
+                                            // console.log(mealType, index);
+                                            if(mealType==1 && index==0){
+                                                veg++;
+                                            }
+                                            else if(mealType==2 && index==0){
+                                                nonveg++;
+                                            }
+                                        })
+                                    }
+                                    else if(mealObj.costCalculated[mealShift] && mealShift=='d'){
+                                        // console.log(mealShift + " -> " + mealObj.costCalculated[mealShift]);
+                                        mealObj.shift.forEach((mealType, index)=>{
+                                            // console.log(mealType, index);
+                                            if(mealType==1 && index==2){
+                                                veg++;
+                                            }
+                                            else if(mealType==2 && index==2){
+                                                nonveg++;
+                                            }
+                                        })
+                                    }
+                                }
+                            }
+                            
+                        }
+
+                    });
+                    // console.log("total: ",totalCost, "veg: ",veg,"nonveg: ",nonveg);
+                    if(totalCost){
+                        visible.style.display='block';
+                        vQty.innerHTML=veg;
+                        nvQty.innerHTML=nonveg;
+                        vTotal.innerHTML=(veg*40);
+                        nvTotal.innerHTML=(nonveg*60);
+                        gTotal.innerHTML=totalCost;
+                    }
+                    else{
+                        alert("No meal supplied to you during the selected period!");
+                    }
+                
+
+                //     if(res.exists){
+                //         alert(email+" successfully removed!");
+                //     }
+                //     else{
+                //         alert(email+" does not exist, please enter an existing email!");
+                //     }
+                //     // console.log("in ajax call", res);
+                //     // document.getElementById('user-name').innerHTML = res.username;
+                // window.location.reload();
+                },data);
+
+            }
+            else{
+                alert("Please select a from date cannot be lesser than to date!");
+            }
+        }
+        else{
+            alert("Please select a valid date!");
+        }
+    }
+
     </script>
 </body>
 </html>

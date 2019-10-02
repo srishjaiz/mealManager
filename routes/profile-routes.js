@@ -199,6 +199,11 @@ router.post('/setMealDetails', authCheck, (req, res) => {
     let mealObj={
         date: req.body.date,
         shift: req.body.shift,
+        costCalculated: {
+            l:0,
+            b:0,
+            d:0
+        },
         cost: 0
     };
     let sameDateFound=false;
@@ -286,12 +291,12 @@ router.post('/fetchMealsRequired', authCheck, (req, res) => {
     let shiftIndex;
     if(req.body.shiftInput=="Lunch")shiftIndex=1
     else if(req.body.shiftInput=="Breakfast")shiftIndex=0
-    else if(req.body.shiftInput=="Dinner")shiftIndex=2
-    else shiftIndex=-1
+    // else if(req.body.shiftInput=="Dinner")shiftIndex=2
+    else shiftIndex=2
     res.writeHead(200, {
         'Content-Type': 'application/json'
     });
-    let mealReqFound=false;  
+    let mealReqFound=false,costCalFound=false;  
     let veg=0,nonveg=0;
     Meal.find({ mealsTaken: { $elemMatch: { date: req.body.date}}}).exec()
     .then((usersReqMeal)=>{
@@ -304,21 +309,52 @@ router.post('/fetchMealsRequired', authCheck, (req, res) => {
                 function fn(obj, objIndex, mealsTakenArray){
                     if(obj.date === req.body.date){
                         // console.log(obj.shift);
-                        obj.shift.forEach((mealType, index)=>{
-                            // console.log("mealType:",mealType, "index:", index);
-                            if(mealType==1 && index==shiftIndex){
-                                veg++;
-                            }
-                            else if(mealType==2 && index==shiftIndex){
-                                nonveg++;
-                            }
-                        })
+                        if(shiftIndex==1){
+                            obj.costCalculated.l?(costCalFound=true):(costCalFound=false);
+                            console.log("cost found: ",costCalFound);
+                            obj.shift.forEach((mealType, index)=>{
+                                // console.log("mealType:",mealType, "index:", index);
+                                if(mealType==1 && index==shiftIndex){
+                                    veg++;
+                                }
+                                else if(mealType==2 && index==shiftIndex){
+                                    nonveg++;
+                                }
+                            });
+                        }
+                        else if(shiftIndex==2){
+                            obj.costCalculated.d?(costCalFound=true):(costCalFound=false);
+                            console.log("cost found: ",costCalFound);
+                            obj.shift.forEach((mealType, index)=>{
+                                // console.log("mealType:",mealType, "index:", index);
+                                if(mealType==1 && index==shiftIndex){
+                                    veg++;
+                                }
+                                else if(mealType==2 && index==shiftIndex){
+                                    nonveg++;
+                                }
+                            });
+                        }
+                        else{
+                            obj.costCalculated.b?(costCalFound=true):(costCalFound=false);
+                            console.log("cost found: ",costCalFound);
+                            obj.shift.forEach((mealType, index)=>{
+                                // console.log("mealType:",mealType, "index:", index);
+                                if(mealType==1 && index==shiftIndex){
+                                    veg++;
+                                }
+                                else if(mealType==2 && index==shiftIndex){
+                                    nonveg++;
+                                }
+                            });
+                        }                       
                     }
                 }
             })
             let resObj={
                 veg: veg,
                 nonveg: nonveg,
+                costCalFound: costCalFound,
                 mealReqFound: mealReqFound,
                 user: req.user
             };
@@ -328,6 +364,7 @@ router.post('/fetchMealsRequired', authCheck, (req, res) => {
             console.log("no meal req found");
             let resObj={
                 mealReqFound: mealReqFound,
+                costCalFound: costCalFound,
                 user: req.user
             };
             res.end(JSON.stringify(resObj));
@@ -344,11 +381,11 @@ router.post('/updateMealCost', authCheck, (req, res) => {
     let shiftIndex;
     if(req.body.shiftInput=="Lunch")shiftIndex=1
     else if(req.body.shiftInput=="Breakfast")shiftIndex=0
-    else if(req.body.shiftInput=="Dinner")shiftIndex=2
-    else shiftIndex=-1
+    // else if(req.body.shiftInput=="Dinner")shiftIndex=2
+    else shiftIndex=2
     
-    let mealReqFound=false;  
-    let veg=0,nonveg=0;
+    let mealReqFound=false,costUpdated=false;  
+    // let veg=0,nonveg=0;
     Meal.find({ mealsTaken: { $elemMatch: { date: req.body.date}}}).exec()
     .then((usersReqMeal)=>{
         console.log("users:",usersReqMeal);
@@ -359,11 +396,25 @@ router.post('/updateMealCost', authCheck, (req, res) => {
                 userReqMeal.mealsTaken.forEach(fn);
                 function fn(obj, objIndex, mealsTakenArray){
                     if(obj.date === req.body.date){
-                        // console.log(obj.shift);
+                        // console.log("obj: ",obj);
+                        // obj:  { date: '2019-10-08',
+                        //         shift: [ '1', '1', '2' ],
+                        //         costCalculated: { l: 0, b: 0, d: 0 },
+                        //         cost: 0 }
+                        let costCalFound;
+                        if(shiftIndex==1){
+                            costCalFound=obj.costCalculated.l;
+                        }
+                        else if(shiftIndex==2){
+                            costCalFound=obj.costCalculated.d;
+                        }
+                        else{
+                            costCalFound=obj.costCalculated.b;
+                        }
                         obj.shift.forEach((mealType, index)=>{
+                                // console.log("meal: ",mealType, "index: ",index);
                             // console.log("mealType:",mealType, "index:", index);
-                            if(mealType==1 && index==shiftIndex){
-                                // veg++;
+                            if(mealType==1 && index==shiftIndex && costCalFound==0){
                                 Meal.findOne({$and: [{useremail: userReqMeal.useremail}, {mealsTaken: { $elemMatch: { date: req.body.date}}}]})
                                 .then((user)=>{
                                     if(user){
@@ -373,32 +424,82 @@ router.post('/updateMealCost', authCheck, (req, res) => {
                                             if(obj.date==req.body.date){
                                                 oldCost= obj.cost;
                                             }
-                                        })
-                                        
+                                        })                                        
                                         // console.log("oldcost:",oldCost);
                                         let newCost= oldCost+40;
-                                        Meal.update(
-                                        {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
-                                        { $set: { "mealsTaken.$.cost": newCost}}
-                                        )
-                                        .then((costUpdated)=>{
-                                            if(costUpdated.n){
-                                                console.log("updated")
-                                            }
-                                            else{
-                                                //not updated
-                                                console.log("not updated")
-                                            }
-                                        })
+                                        if(shiftIndex==1){
+                                            Meal.update(
+                                            {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                            { $set: { "mealsTaken.$.cost": newCost, "mealsTaken.$.costCalculated.l":1}}
+                                            )
+                                            .then((Updated)=>{
+                                                if(Updated.n){
+                                                    console.log("updated l");
+                                                    costUpdated=true;
+                                                }
+                                                else{
+                                                    //not updated
+                                                    console.log("not updated l")
+                                                }
+                                                let resObj={
+                                                    mealReqFound: mealReqFound,
+                                                    costUpdated: costUpdated,
+                                                    user: req.user
+                                                };
+                                                res.end(JSON.stringify(resObj));
+                                            });
+                                        }
+                                        else if(shiftIndex==2){
+                                            Meal.update(
+                                            {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                            { $set: { "mealsTaken.$.cost": newCost, "mealsTaken.$.costCalculated.d":1}}
+                                            )
+                                            .then((Updated)=>{
+                                                if(Updated.n){
+                                                    console.log("updated d");
+                                                    costUpdated=true;
+                                                }
+                                                else{
+                                                    //not updated
+                                                    console.log("not updated d")
+                                                }
+                                                let resObj={
+                                                    mealReqFound: mealReqFound,
+                                                    costUpdated: costUpdated,
+                                                    user: req.user
+                                                };
+                                                res.end(JSON.stringify(resObj));
+                                            });
+                                        }
+                                        else{
+                                            Meal.update(
+                                            {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                            { $set: { "mealsTaken.$.cost": newCost, "mealsTaken.$.costCalculated.b":1}}
+                                            )
+                                            .then((Updated)=>{
+                                                if(Updated.n){
+                                                    console.log("updated b");
+                                                    costUpdated=true;
+                                                }
+                                                else{
+                                                    //not updated
+                                                    console.log("not updated b")
+                                                }
+                                                let resObj={
+                                                    mealReqFound: mealReqFound,
+                                                    costUpdated: costUpdated,
+                                                    user: req.user
+                                                };
+                                                res.end(JSON.stringify(resObj));
+                                            });
+                                        }
                                     }
                                     else{
                                         console.log("user not found!")
                                     }
-                                })
-                                
+                                });
                             }
-                            else if(mealType==2 && index==shiftIndex){
-                                // nonveg++;
+                            else if(mealType==2 && index==shiftIndex && costCalFound==0){
                                 Meal.findOne({$and: [{useremail: userReqMeal.useremail}, {mealsTaken: { $elemMatch: { date: req.body.date}}}]})
                                 .then((user)=>{
                                     if(user){
@@ -409,47 +510,260 @@ router.post('/updateMealCost', authCheck, (req, res) => {
                                                 oldCost= obj.cost;
                                             }
                                         })
+
+                                        
                                         // console.log("oldcost:",oldCost);
                                         let newCost= oldCost+60;
-                                        Meal.update(
-                                        {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
-                                        { $set: { "mealsTaken.$.cost": newCost}}
-                                        )
-                                        .then((costUpdated)=>{
-                                            if(costUpdated.n){
-                                                console.log("updated")
-                                            }
-                                            else{
-                                                //not updated
-                                                console.log("not updated")
-                                            }
-                                        })
+                                        if(shiftIndex==1){
+                                            Meal.update(
+                                            {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                            { $set: { "mealsTaken.$.cost": newCost, "mealsTaken.$.costCalculated.l":1}}
+                                            )
+                                            .then((Updated)=>{
+                                                if(Updated.n){
+                                                    console.log("updated l");
+                                                    costUpdated=true;
+                                                }
+                                                else{
+                                                    //not updated
+                                                    console.log("not updated l")
+                                                }
+                                                let resObj={
+                                                    mealReqFound: mealReqFound,
+                                                    costUpdated: costUpdated,
+                                                    user: req.user
+                                                };
+                                                res.end(JSON.stringify(resObj));
+                                            });
+                                        }
+                                        else if(shiftIndex==2){
+                                            Meal.update(
+                                            {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                            { $set: { "mealsTaken.$.cost": newCost, "mealsTaken.$.costCalculated.d":1}}
+                                            )
+                                            .then((Updated)=>{
+                                                if(Updated.n){
+                                                    console.log("updated d");
+                                                    costUpdated=true;
+                                                }
+                                                else{
+                                                    //not updated
+                                                    console.log("not updated d")
+                                                }
+                                                let resObj={
+                                                    mealReqFound: mealReqFound,
+                                                    costUpdated: costUpdated,
+                                                    user: req.user
+                                                };
+                                                res.end(JSON.stringify(resObj));
+                                            });
+                                        }
+                                        else{
+                                            Meal.update(
+                                            {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                            { $set: { "mealsTaken.$.cost": newCost, "mealsTaken.$.costCalculated.b":1}}
+                                            )
+                                            .then((Updated)=>{
+                                                if(Updated.n){
+                                                    console.log("updated b");
+                                                    costUpdated=true;
+                                                }
+                                                else{
+                                                    //not updated
+                                                    console.log("not updated b")
+                                                }
+                                                let resObj={
+                                                    mealReqFound: mealReqFound,
+                                                    costUpdated: costUpdated,
+                                                    user: req.user
+                                                };
+                                                res.end(JSON.stringify(resObj));
+                                            });
+                                        }
                                     }
                                     else{
                                         console.log("user not found!")
                                     }
-                                })
+                                });
                             }
-                        })
+                            else if(mealType==0 && index==shiftIndex && costCalFound==0){
+                                if(shiftIndex==1){
+                                    Meal.update(
+                                    {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                    { $set: { "mealsTaken.$.costCalculated.l":1}}
+                                    )
+                                    .then((Updated)=>{
+                                        if(Updated.n){
+                                            console.log("updated l");
+                                            costUpdated=true;
+                                        }
+                                        else{
+                                            //not updated
+                                            console.log("not updated l")
+                                        }
+                                        let resObj={
+                                            mealReqFound: mealReqFound,
+                                            costUpdated: costUpdated,
+                                            user: req.user
+                                        };
+                                        res.end(JSON.stringify(resObj));
+                                    });
+                                }
+                                else if(shiftIndex==2){
+                                    Meal.update(
+                                    {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                    { $set: { "mealsTaken.$.costCalculated.d":1}}
+                                    )
+                                    .then((Updated)=>{
+                                        if(Updated.n){
+                                            console.log("updated d");
+                                            costUpdated=true;
+                                        }
+                                        else{
+                                            //not updated
+                                            console.log("not updated d")
+                                        }
+                                        let resObj={
+                                            mealReqFound: mealReqFound,
+                                            costUpdated: costUpdated,
+                                            user: req.user
+                                        };
+                                        res.end(JSON.stringify(resObj));
+                                    });
+                                }
+                                else{
+                                    Meal.update(
+                                    {$and: [{useremail: userReqMeal.useremail},{"mealsTaken.date": req.body.date}]},
+                                    { $set: { "mealsTaken.$.costCalculated.b":1}}
+                                    )
+                                    .then((Updated)=>{
+                                        if(Updated.n){
+                                            console.log("updated b");
+                                            costUpdated=true;
+                                        }
+                                        else{
+                                            //not updated
+                                            console.log("not updated b")
+                                        }
+                                        let resObj={
+                                            mealReqFound: mealReqFound,
+                                            costUpdated: costUpdated,
+                                            user: req.user
+                                        };
+                                        res.end(JSON.stringify(resObj));
+                                    });
+                                }
+                            }
+                            else{
+                                let resObj={
+                                    mealReqFound: mealReqFound,
+                                    costUpdated: costUpdated,
+                                    user: req.user
+                                };
+                                res.end(JSON.stringify(resObj));
+                            }
+                        }) //shift loop end here
                     }
                 }
             })
-            let resObj={
-                mealReqFound: mealReqFound,
-                user: req.user
-            };
-            console.log(resObj);
-            res.end(JSON.stringify(resObj));
         }
         else{
             console.log("no meal req found");
             let resObj={
                 mealReqFound: mealReqFound,
+                costUpdated: costUpdated,
                 user: req.user
             };
             console.log(resObj);
             res.end(JSON.stringify(resObj));
         }
     })
+});
+
+
+router.post('/fetchBillAdmin', authCheck, (req, res) => {
+    console.log(req.body);
+    console.log(req.user);
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+
+    let guestFound=false;
+    Meal.findOne({useremail: req.body.email}).exec()
+    .then((guestDetails)=>{
+        if(guestDetails){
+            guestFound=true;
+            console.log(guestDetails);
+            let data={
+                guestFound: guestFound,
+                mealsTaken: guestDetails.mealsTaken,
+                currentUser: req.user
+            }
+            res.end(JSON.stringify(data));
+        }
+        else{
+            console.log("guest doesn't exist!");
+            let data={
+                guestFound: guestFound,
+                currentUser: req.user
+            }
+            res.end(JSON.stringify(data));
+        }
+    })
+    // let emails=[];
+    // User.find({isAdmin: false}).exec()
+    // .then(function(guests){
+    //     guests.forEach(function(guest){
+    //         // console.log(guest.useremail);
+    //         emails.push(guest.useremail);
+    //     });
+    //     data={
+    //         emails: emails
+    //     }
+    //     console.log(data);
+    // });
+});
+
+router.post('/fetchBill', authCheck, (req, res) => {
+    console.log(req.body);
+    console.log(req.user);
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+
+    let guestFound=false;
+    Meal.findOne({useremail: req.user.useremail}).exec()
+    .then((guestDetails)=>{
+        if(guestDetails){
+            guestFound=true;
+            console.log(guestDetails);
+            let data={
+                guestFound: guestFound,
+                mealsTaken: guestDetails.mealsTaken,
+                currentUser: req.user
+            }
+            res.end(JSON.stringify(data));
+        }
+        else{
+            console.log("guest doesn't exist!");
+            let data={
+                guestFound: guestFound,
+                currentUser: req.user
+            }
+            res.end(JSON.stringify(data));
+        }
+    })
+    // let emails=[];
+    // User.find({isAdmin: false}).exec()
+    // .then(function(guests){
+    //     guests.forEach(function(guest){
+    //         // console.log(guest.useremail);
+    //         emails.push(guest.useremail);
+    //     });
+    //     data={
+    //         emails: emails
+    //     }
+    //     console.log(data);
+    // });
 });
 module.exports = router;

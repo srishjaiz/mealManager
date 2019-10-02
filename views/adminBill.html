@@ -13,7 +13,7 @@
     <!-- custom stylesheet -->
     <link rel="stylesheet" href="/css/main.css">
     <style>
-
+        
     </style>
 </head>
 <body>
@@ -54,45 +54,50 @@
                         <form class="" action="#" method="POST">
                             <div class="datalist">
                                 <label>email id:</label>
-                                <input list="shift">
-                                <datalist id="shift">
-                                    <option value="Breakfast">
-                                    <option value="Lunch">
-                                    <option value="Dinner">
+                                <input id="email-list" list="emails">
+                                <datalist id="emails">
                                 </datalist>  
                             </div> 
                             <div class="date">
                                 <label>from:</label>
-                                <input type="date">
+                                <input id="from-date" type="date">
                             </div>
                             <div class="date">
                                 <label>to:</label>
-                                <input type="date">
+                                <input id="to-date" type="date">
                             </div>                         
-                            <button class="onhover-bg-color btn btn-create">view</button>
+                            <button onclick="fetchBill()" type="submit" id="submit-btn-1" class="onhover-bg-color btn btn-create">view</button>
                         </form>
                     </div>
                     <div class="visible bottom">
                         <h2>bill</h2>
-                        <div>
-                            <span>name</span>
-                            <span>puja</span>
-                        </div>
-                        <div>
-                            <span>veg</span>
-                            <span>5</span>
-                        </div>
-                        <div>
-                            <span>non veg</span>
-                            <span>4</span>
-                        </div>
-                        <div>
+                        <!-- <div class="bill-div">
+                            <span style="text-align: left">name</span>
+                            <span id="name">puja</span>
+                        </div> -->
+                        <div class="bill-div">
+                            <span style="text-align: left">meal type</span>
+                            <span>qty.</span>
+                            <span>cost / qty.</span>
                             <span>total</span>
-                            <span>9</span>
                         </div>
-                        <!-- <form class="" action="#" method="POST">                        
-                            <button class="onhover-bg-color btn btn-create">ok</button>
-                        </form> -->
+                        <div>
+                            <span style="text-align: left">veg</span>
+                            <span id="qty-v">5</span>                        
+                            <span>40</span>
+                            <span id="total-v">200</span>
+                        </div>
+                        <div>
+                            <span style="text-align: left">non-veg</span>
+                            <span id="qty-nv">5</span>                        
+                            <span>60</span>
+                            <span id="total-nv">200</span>
+                        </div>
+                        <div class="bill-div">
+                            <span style="text-align: left">grand total</span>
+                            <span id="grand-total">9</span>
+                        </div>
+                        <button style="margin-left: 50px" onclick="resetCost()" type="submit" id="submit-btn-2" class="onhover-bg-color btn btn-create">paid</button>
                     </div>
                 </div>
                 </div>
@@ -108,5 +113,152 @@
        </div>
     </div>
     <script src="/script/main.js"></script>
+    <script>
+    document.getElementById("submit-btn-1").addEventListener("click", function(event){
+        event.preventDefault()
+    });
+    document.getElementById("submit-btn-2").addEventListener("click", function(event){
+        event.preventDefault()
+    });
+    function formatDateToServer(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+    window.onload = function() {
+        let d = new Date();
+        let today=formatDateToServer(d);
+        let p = d.setDate(d.getDate()-30);
+        let oneMonthBrfore=formatDateToServer(p);  
+        let emailDataList= document.getElementById("emails");
+
+        let fromDate=document.getElementById("from-date");
+        let toDate=document.getElementById("to-date");
+        fromDate.value=oneMonthBrfore;
+        toDate.value= today;
+        toDate.setAttribute('max',today);
+        fromDate.setAttribute('max',today);             
+        sendRequest('POST', '/profile/fetchEmails', (res) => {
+            // console.log(res);
+            res.emails.forEach(function(email){
+                // console.log(email);
+                let option = document.createElement("option");
+                option.value=email;
+                option.innerHTML=email;
+                emailDataList.appendChild(option); 
+            });
+
+        });             
+    };
+
+    function fetchBill(){
+        // e.preventDefault();
+        let email=document.getElementById("email-list").value;
+        let fromDate=document.getElementById("from-date").value;
+        let toDate=document.getElementById("to-date").value;
+        // let guestName=document.getElementById("name");
+        let vQty=document.getElementById("qty-v");
+        let nvQty=document.getElementById("qty-nv");
+        let vTotal=document.getElementById("total-v");
+        let nvTotal=document.getElementById("total-nv");
+        let gTotal=document.getElementById("grand-total");
+
+        // console.log(email);
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+        {
+            // return (true)
+            if(fromDate && toDate){
+                if(fromDate <= toDate){
+                    // console.log(email, fromDate, toDate);
+                    let data={
+                        email: email,
+                        fromDate: fromDate,
+                        toDate: toDate
+                    }
+                    sendRequest('POST', '/profile/fetchBillAdmin', (res) => {
+                        // console.log(res);
+                        if(res.guestFound){
+                            let totalCost=0,veg=0,nonveg=0;
+                            res.mealsTaken.forEach((mealObj)=>{
+                                // console.log(mealObj);
+                                if(mealObj.date >= fromDate && mealObj.date <= toDate){
+                                    totalCost+=mealObj.cost;
+                                    for (let mealShift in mealObj.costCalculated) {
+                                        if (mealObj.costCalculated.hasOwnProperty(mealShift)) {
+                                            if(mealObj.costCalculated[mealShift] && mealShift=='l'){
+                                                mealObj.shift.forEach((mealType, index)=>{
+                                                    if(mealType==1 && index==1){
+                                                        veg++;
+                                                    }
+                                                    else if(mealType==2 && index==1){
+                                                        nonveg++;
+                                                    }
+                                                })
+                                            }
+                                            else if(mealObj.costCalculated[mealShift] && mealShift=='b'){
+                                                mealObj.shift.forEach((mealType, index)=>{
+                                                    if(mealType==1 && index==0){
+                                                        veg++;
+                                                    }
+                                                    else if(mealType==2 && index==0){
+                                                        nonveg++;
+                                                    }
+                                                })
+                                            }
+                                            else if(mealObj.costCalculated[mealShift] && mealShift=='d'){
+                                                mealObj.shift.forEach((mealType, index)=>{
+                                                    if(mealType==1 && index==2){
+                                                        veg++;
+                                                    }
+                                                    else if(mealType==2 && index==2){
+                                                        nonveg++;
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                            // console.log("total: ",totalCost, "veg: ",veg,"nonveg: ",nonveg);
+                            if(totalCost){
+                                visible.style.display='block';
+                                vQty.innerHTML=veg;
+                                nvQty.innerHTML=nonveg;
+                                vTotal.innerHTML=(veg*40);
+                                nvTotal.innerHTML=(nonveg*60);
+                                gTotal.innerHTML=totalCost;
+                            }
+                            else{
+                                alert("No meal supplied to the guest during the selected period!");
+                            }
+                        }
+                        else{
+                            alert("Guest does not exist!");
+                        }
+                    },data);
+
+                }
+                else{
+                    alert("Please select a from date cannot be lesser than to date!");
+                }
+            }
+            else{
+                alert("Please select a valid date!");
+            }
+        }
+        else{
+            alert("Please enter a valid email address!");
+        }
+    }
+
+    </script>
 </body>
 </html>
